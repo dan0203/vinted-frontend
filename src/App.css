@@ -15,6 +15,11 @@ input {
     font: inherit;
 }
 
+h1 {
+    font-size: 34px;
+    font-weight: bold;
+}
+
 button {
     font: inherit;
     width: 115px;
@@ -79,4 +84,41 @@ header button {
     border: 1px solid #2cb1ba;
     color: #fff;
     background-color: #2cb1ba;
+}
+
+/* HOME */
+.hero {
+    background-image: url('./assets/hero.jpg');
+    height: 455px;
+    width: 100vw;
+    background-position: center;
+    background-size: cover;
+
+    .container {
+        position: relative;
+    }
+
+    .highlight {
+        position: absolute;
+        top: 75px;
+        width: 410px;
+        height: 270px;
+        border: 1px solid #bbb;
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 25px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+
+        button {
+            border: 1px solid #2cb1ba;
+            color: #fff;
+            background-color: #2cb1ba;
+            font-size: 16px;
+            width: 185px;
+            padding: 15px 0;
+        }
+    }
 }
