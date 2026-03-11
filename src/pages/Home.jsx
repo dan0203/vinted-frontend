@@ -2,7 +2,7 @@ import { Link } from 'react-router';
 
 const Home = ({ offers }) => {
     return (
-        <main>
+        <main className="main-home">
             <div className="hero">
                 <div className="container">
                     <div className="highlight">

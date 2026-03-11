@@ -93,7 +93,7 @@ header button {
 }
 
 /* HOME */
-.hero {
+.main-home .hero {
     background-image: url('./assets/hero.jpg');
     height: 455px;
     width: 100vw;
@@ -129,7 +129,7 @@ header button {
     }
 }
 
-main .container {
+.main-home .container {
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
@@ -137,7 +137,7 @@ main .container {
     column-gap: 12px;
 }
 
-article {
+.main-home article {
     flex: 0 0 235px;
     cursor: pointer;
 
@@ -181,5 +181,49 @@ article {
     .marque {
         font-size: 12px;
         color: #999;
+    }
+}
+
+/* OFFER */
+.main-offer {
+    background-color: #ebedee;
+}
+
+.main-offer .container {
+    display: flex;
+    gap: 150px;
+
+    padding: 30px 100px;
+
+    > img {
+        width: 450px;
+        height: 600px;
+        object-fit: cover;
+    }
+
+    aside {
+        background-color: #fff;
+        padding: 45px 40px;
+
+        .user-info {
+            display: flex;
+            gap: 15px;
+
+            > img {
+                width: 50px;
+                height: 50px;
+                object-fit: cover;
+                border-radius: 50%;
+            }
+        }
+
+        button {
+            width: 100%;
+            border: 1px solid #2cb1ba;
+            color: #fff;
+            background-color: #2cb1ba;
+            font-size: 16px;
+            padding: 12px 0;
+        }
     }
 }
