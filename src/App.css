@@ -1,0 +1,82 @@
+/* GLOBALS */
+@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+
+html {
+    font-family: 'Questrial', sans-serif;
+}
+
+.container {
+    max-width: 1370px;
+    margin: 0 auto;
+    padding: 10px 20px;
+}
+
+input {
+    font: inherit;
+}
+
+button {
+    font: inherit;
+    width: 115px;
+    font-size: 12px;
+    padding: 8px 0;
+    border-radius: 5px;
+}
+
+/* HEADER */
+header .container {
+    display: flex;
+    align-items: center;
+    gap: 70px;
+}
+
+header img {
+    height: 35px;
+}
+
+header .search {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+
+    flex: 1 0 auto;
+
+    .magnifying-glass {
+        color: #bbbbbb;
+        font-size: 20px;
+        stroke-width: 1.5;
+    }
+
+    input {
+        width: 100%;
+        border: none;
+        padding: 10px;
+    }
+
+    input::placeholder {
+        color: #bbb;
+    }
+
+    input:focus {
+        outline: none;
+    }
+}
+
+header .auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    button {
+        border: 1px solid #2cb1ba;
+        color: #2cb1ba;
+        background-color: #fff;
+    }
+}
+
+header button {
+    border: 1px solid #2cb1ba;
+    color: #fff;
+    background-color: #2cb1ba;
+}
