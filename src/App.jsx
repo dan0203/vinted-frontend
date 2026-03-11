@@ -34,8 +34,8 @@ function App() {
             <Router>
                 <Header search={search} setSearch={setSearch} />
                 <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/offer/:id" element={<Offer />} />
+                    <Route path="/" element={<Home offers={offers} />} />
+                    <Route path="/offer" element={<Offer offers={offers} />} />
                 </Routes>
             </Router>
         </>
