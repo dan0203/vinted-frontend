@@ -204,10 +204,59 @@ header button {
     aside {
         background-color: #fff;
         padding: 45px 40px;
+        width: 400px;
+
+        .product_price {
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+
+        .product_details_wrapper {
+            margin-bottom: 55px;
+            padding-bottom: 45px;
+            border-bottom: 1px solid #ddd;
+
+            .product_details {
+                display: flex;
+                width: 100%;
+                margin-bottom: 7px;
+
+                .product_details_key {
+                    flex: 0 0 50%;
+                    font-size: 14px;
+                    color: #999;
+                    text-transform: uppercase;
+                }
+
+                .product_details_value {
+                    flex: 0 0 50%;
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: #666;
+                    text-transform: uppercase;
+
+                    display: flex;
+                    flex-wrap: wrap;
+                }
+            }
+        }
+
+        .product_name {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .product_description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
 
         .user-info {
             display: flex;
+            align-items: center;
             gap: 15px;
+            margin-bottom: 70px;
 
             > img {
                 width: 50px;
