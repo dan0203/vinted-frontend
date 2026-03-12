@@ -37,6 +37,12 @@ header .search {
     }
 }
 
+header .logout {
+    background-color: #c2175b;
+    color: white;
+    border: 1px solid #c2175b;
+}
+
 header .auth-buttons {
     display: flex;
     align-items: center;

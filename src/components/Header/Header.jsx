@@ -1,9 +1,12 @@
 import './Header.css';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import Cookies from 'js-cookie';
 import logo from '../../assets/images/logo-vinted.png';
 import { HiMagnifyingGlass } from 'react-icons/hi2';
 
 const Header = ({ search, setSearch }) => {
+    const navigate = useNavigate();
+
     return (
         <header>
             <div className="container">
@@ -14,14 +17,28 @@ const Header = ({ search, setSearch }) => {
                     <HiMagnifyingGlass className="magnifying-glass" />
                     <input type="text" name="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Recherche des articles" />
                 </div>
-                <div className="auth-buttons">
-                    <Link to="/signup">
-                        <button>S'inscrire</button>
-                    </Link>
-                    <Link to="/login">
-                        <button>Se connecter</button>
-                    </Link>
-                </div>
+                {Cookies.get('token') ? (
+                    <button
+                        className="logout"
+                        onClick={() => {
+                            // 1 : supprimer le cookie
+                            Cookies.remove('token');
+                            // 2 : rediriger vers Home
+                            navigate('/');
+                        }}
+                    >
+                        Se déconnecter
+                    </button>
+                ) : (
+                    <div className="auth-buttons">
+                        <Link to="/signup">
+                            <button>S'inscrire</button>
+                        </Link>
+                        <Link to="/login">
+                            <button>Se connecter</button>
+                        </Link>
+                    </div>
+                )}
                 <Link to="/publish">
                     <button>Vends tes articles</button>
                 </Link>
