@@ -137,8 +137,14 @@ header button {
     column-gap: 12px;
 }
 
+.main-home a {
+    width: calc((100% - 48px) / 5);
+    text-decoration: none;
+    color: #000;
+}
+
 .main-home article {
-    flex: 0 0 235px;
+    width: 100%;
     cursor: pointer;
 
     .user-info {
@@ -160,7 +166,7 @@ header button {
     }
 
     > img {
-        width: 235px;
+        width: 100%;
         height: 360px;
         object-fit: cover;
         margin-bottom: 10px;
