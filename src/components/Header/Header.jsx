@@ -15,10 +15,16 @@ const Header = ({ search, setSearch }) => {
                     <input type="text" name="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Recherche des articles" />
                 </div>
                 <div className="auth-buttons">
-                    <button>S'inscrire</button>
-                    <button>Se connecter</button>
+                    <Link to="/signup">
+                        <button>S'inscrire</button>
+                    </Link>
+                    <Link to="/login">
+                        <button>Se connecter</button>
+                    </Link>
                 </div>
-                <button>Vends tes articles</button>
+                <Link to="/publish">
+                    <button>Vends tes articles</button>
+                </Link>
             </div>
         </header>
     );
