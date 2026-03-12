@@ -1,9 +1,9 @@
 import './App.css';
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router';
-import Header from './components/Header';
-import Home from './pages/Home';
-import Offer from './pages/Offer';
+import Header from './components/Header/Header';
+import Home from './pages/Home/Home';
+import Offer from './pages/Offer/Offer';
 
 function App() {
     const [search, setSearch] = useState('');

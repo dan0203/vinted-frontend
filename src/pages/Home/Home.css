@@ -1,0 +1,96 @@
+.main-home .hero {
+    background-image: url('../../assets/images/hero.jpg');
+    height: 455px;
+    width: 100vw;
+    background-position: center;
+    background-size: cover;
+
+    .container {
+        position: relative;
+    }
+
+    .highlight {
+        position: absolute;
+        top: 75px;
+        width: 410px;
+        height: 270px;
+        border: 1px solid #bbb;
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 25px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+
+        button {
+            border: 1px solid #2cb1ba;
+            color: #fff;
+            background-color: #2cb1ba;
+            font-size: 16px;
+            width: 185px;
+            padding: 15px 0;
+        }
+    }
+}
+
+.main-home .container {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    row-gap: 30px;
+    column-gap: 12px;
+}
+
+.main-home a {
+    width: calc((100% - 48px) / 5);
+    text-decoration: none;
+    color: #000;
+}
+
+.main-home article {
+    width: 100%;
+    cursor: pointer;
+
+    .user-info {
+        padding: 10px;
+        display: flex;
+        align-items: center;
+
+        img {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        span {
+            font-size: 12px;
+            color: #999;
+        }
+    }
+
+    > img {
+        width: 100%;
+        height: 360px;
+        object-fit: cover;
+        margin-bottom: 10px;
+    }
+
+    .price,
+    .size,
+    .marque {
+        padding-left: 10px;
+        margin-bottom: 5px;
+    }
+
+    .price {
+        font-size: 14px;
+    }
+
+    .size,
+    .marque {
+        font-size: 12px;
+        color: #999;
+    }
+}

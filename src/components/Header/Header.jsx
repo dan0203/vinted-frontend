@@ -1,5 +1,6 @@
+import './Header.css';
 import { Link } from 'react-router';
-import logo from '../assets/logo-vinted.png';
+import logo from '../../assets/images/logo-vinted.png';
 import { HiMagnifyingGlass } from 'react-icons/hi2';
 
 const Header = ({ search, setSearch }) => {
