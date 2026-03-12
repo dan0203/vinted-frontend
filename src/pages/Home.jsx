@@ -41,7 +41,7 @@ const Home = () => {
                         .sort((a, b) => new Date(b.product_date) - new Date(a.product_date))
                         .map(offer => {
                             // Reconstitution du tableau des détails du produit pour un affichage plus sûr
-                            offer.productDetails = [];
+                            offer.productDetails = {};
 
                             // Pour chaque élément de product_details de l'offre en cours de mapping,
                             //  on récupère ses pairs key/value,
