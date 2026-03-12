@@ -40,10 +40,17 @@ const Home = () => {
                     {offers
                         .sort((a, b) => new Date(b.product_date) - new Date(a.product_date))
                         .map(offer => {
-                            const productDetails = {};
+                            // Reconstitution du tableau des détails du produit pour un affichage plus sûr
+                            offer.productDetails = [];
 
+                            // Pour chaque élément de product_details de l'offre en cours de mapping,
+                            //  on récupère ses pairs key/value,
+                            //  et on crée une entrée dans le tableau productDetails dont :
+                            //      - l'indice sera la key (Object.entries(offer.product_details[i])[0][0])
+                            //      - la valeur sera la value (Object.entries(offer.product_details[i])[0][1])
                             for (let i = 0; i < offer.product_details.length; i++) {
-                                productDetails[Object.entries(offer.product_details[i])[0][0]] = Object.entries(offer.product_details[i])[0][1];
+                                const entry = Object.entries(offer.product_details[i])[0];
+                                offer.productDetails[entry[0]] = entry[1];
                             }
 
                             return (
@@ -55,8 +62,9 @@ const Home = () => {
                                         </p>
                                         <img src={offer.product_image.url} alt={offer.product_description} />
                                         <p className="price">{offer.product_price} €</p>
-                                        {productDetails['TAILLE'] !== undefined && <p className="size">{productDetails['TAILLE']}</p>}
-                                        {productDetails['MARQUE'] !== undefined && <p className="marque">{productDetails['MARQUE']}</p>}
+                                        {/* POINT 2 : on affiche les détails s'ils existent dans le tableau productDetails */}
+                                        {offer.productDetails['TAILLE'] !== undefined && <p className="size">{offer.productDetails['TAILLE']}</p>}
+                                        {offer.productDetails['MARQUE'] !== undefined && <p className="marque">{offer.productDetails['MARQUE']}</p>}
                                     </article>
                                 </Link>
                             );
