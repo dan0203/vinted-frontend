@@ -1,10 +1,9 @@
 import './Signup.css';
 import { useState } from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import { Link, useNavigate } from 'react-router';
 
-const Signup = () => {
+const Signup = ({ handleToken }) => {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -34,10 +33,15 @@ const Signup = () => {
                                 const response = await axios.post(import.meta.env.VITE_API_URL + '/user/signup', data);
 
                                 // 2 : si la réponse est ok, stocker le token dans un cookie
-                                Cookies.set('token', response.data.token, { expires: 7 });
+                                if (response.data.token) {
+                                    handleToken(response.data.token);
+                                    // Cookies.set('token', response.data.token, { expires: 7 });
+                                    // setIsConnected(true);
+                                    setError('');
 
-                                // 3 : rediriger vers Home
-                                navigate('/');
+                                    // 3 : rediriger vers Home
+                                    navigate('/');
+                                }
                             } catch (error) {
                                 error.message && console.log('error.message', error.message);
                                 error.response && console.log('error.response.data', error.response.data);

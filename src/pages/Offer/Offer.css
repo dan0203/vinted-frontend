@@ -4,20 +4,21 @@
 
 .main-offer .container {
     display: flex;
-    gap: 150px;
+    justify-content: space-around;
 
-    padding: 30px 100px;
+    padding: 30px;
 
     > img {
-        width: 450px;
+        /* width: 450px; */
         height: 600px;
-        object-fit: cover;
+        /* object-fit: cover; */
     }
 
     aside {
         background-color: #fff;
         padding: 45px 40px;
         width: 400px;
+        height: 600px;
 
         .product_price {
             font-size: 24px;

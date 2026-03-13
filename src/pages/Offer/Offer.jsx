@@ -23,7 +23,7 @@ const Offer = () => {
         };
 
         fetchData();
-    }, []);
+    }, [params.id]);
 
     return isLoading ? (
         <p className="loading">Chargement en cours...</p>
@@ -35,6 +35,7 @@ const Offer = () => {
                     <aside>
                         <p className="product_price">{offer.product_price} €</p>
                         <div className="product_details_wrapper">
+                            {/* on peut aussi mapper et utiliser les entries pour chaque élément */}
                             {offer.productDetails.map(p => (
                                 <div key={`${p[0]} ${p[1]}`} className="product_details">
                                     <p className="product_details_key">{p[0]}</p>

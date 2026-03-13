@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import logo from '../../assets/images/logo-vinted.png';
 import { HiMagnifyingGlass } from 'react-icons/hi2';
 
-const Header = ({ search, setSearch }) => {
+const Header = ({ search, setSearch, handleToken }) => {
     const navigate = useNavigate();
 
     return (
@@ -22,7 +22,9 @@ const Header = ({ search, setSearch }) => {
                         className="logout"
                         onClick={() => {
                             // 1 : supprimer le cookie
-                            Cookies.remove('token');
+                            handleToken(null);
+                            // Cookies.remove('token');
+                            // setIsConnected(false);
                             // 2 : rediriger vers Home
                             navigate('/');
                         }}
