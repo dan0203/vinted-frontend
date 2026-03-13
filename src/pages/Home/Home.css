@@ -4,6 +4,13 @@
     width: 100vw;
     background-position: center;
     background-size: cover;
+    position: relative;
+
+    .forme {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
 
     .container {
         position: relative;

@@ -1,4 +1,5 @@
 import './Home.css';
+import tear from '../../assets/images/tear.png';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router';
@@ -29,6 +30,7 @@ const Home = () => {
         <>
             <main className="main-home">
                 <div className="hero">
+                    <img className="forme" src={tear} />
                     <div className="container">
                         <div className="highlight">
                             <h1>Prêts à faire du tri dans vos placards ?</h1>
