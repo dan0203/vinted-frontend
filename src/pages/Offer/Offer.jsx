@@ -10,7 +10,7 @@ const Offer = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await axios.get(import.meta.env.VITE_API_URL + '/offer/' + params.id);
+            const response = await axios.get(import.meta.env.VITE_API_URL + '/offers/' + params.id);
             const offerToDisplay = response.data;
             offerToDisplay.productDetails = [];
 
@@ -46,7 +46,7 @@ const Offer = () => {
                         <p className="product_name">{offer.product_name}</p>
                         <p className="product_description">{offer.product_description}</p>
                         <p className="user-info">
-                            <img src={offer.owner.account.avatar.url} alt={offer.owner.account.username} />
+                            {offer.owner.account.avatar && <img src={offer.owner.account.avatar.url} alt={offer.owner.account.username} />}
                             <span>{offer.owner.account.username}</span>
                         </p>
                         <button>Acheter</button>

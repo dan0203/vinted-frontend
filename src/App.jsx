@@ -7,6 +7,7 @@ import Home from './pages/Home/Home';
 import Offer from './pages/Offer/Offer';
 import Signup from './pages/Signup/Signup';
 import Login from './pages/Login/Login';
+import Publish from './pages/Publish/Publish';
 
 function App() {
     const [isConnected, setIsConnected] = useState(false);
@@ -30,6 +31,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/signup" element={<Signup handleToken={handleToken} />} />
                     <Route path="/login" element={<Login handleToken={handleToken} />} />
+                    <Route path="/publish" element={<Publish />} />
                     <Route path="/offers/:id" element={<Offer />} />
                     <Route path="*" element={<div className="container">Route not found</div>} />
                 </Routes>
