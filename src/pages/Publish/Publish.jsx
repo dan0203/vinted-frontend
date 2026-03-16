@@ -1,5 +1,6 @@
 import './Publish.css';
 import { useState } from 'react';
+import { Navigate } from 'react-router';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -15,7 +16,9 @@ const Publish = () => {
     const [newsletter, setNewsletter] = useState(false);
     const [file, setFile] = useState({});
 
-    return (
+    const token = Cookies.get('token');
+
+    return token ? (
         <>
             <main className="main-publish">
                 <div className="container">
@@ -36,10 +39,9 @@ const Publish = () => {
                             formData.append('city', city);
 
                             try {
-                                const token = Cookies.get('token');
                                 const response = await axios.post(import.meta.env.VITE_API_URL + '/offers/publish', formData, {
                                     headers: {
-                                        authorization: `Bearer ${token ? token : ''}`,
+                                        authorization: `Bearer ${token}`,
                                     },
                                 });
 
@@ -176,6 +178,8 @@ const Publish = () => {
                 </div>
             </main>
         </>
+    ) : (
+        <Navigate to="/" />
     );
 };
 
