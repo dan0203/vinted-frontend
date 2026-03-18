@@ -2,6 +2,11 @@
     background-color: #ebedee;
 }
 
+.main-offer {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
 .main-offer .container {
     display: flex;
     justify-content: space-around;

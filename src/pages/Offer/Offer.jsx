@@ -1,5 +1,5 @@
 import './Offer.css';
-import { useParams } from 'react-router';
+import { data, Link, useParams } from 'react-router';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -10,16 +10,20 @@ const Offer = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await axios.get(import.meta.env.VITE_API_URL + '/offers/' + params.id);
-            const offerToDisplay = response.data;
-            offerToDisplay.productDetails = [];
+            try {
+                const response = await axios.get(import.meta.env.VITE_API_URL + '/offers/' + params.id);
+                const offerToDisplay = response.data;
+                offerToDisplay.productDetails = [];
 
-            for (let i = 0; i < offerToDisplay.product_details.length; i++) {
-                offerToDisplay.productDetails.push([Object.entries(offerToDisplay.product_details[i])[0][0], Object.entries(offerToDisplay.product_details[i])[0][1]]);
+                for (let i = 0; i < offerToDisplay.product_details.length; i++) {
+                    offerToDisplay.productDetails.push([Object.entries(offerToDisplay.product_details[i])[0][0], Object.entries(offerToDisplay.product_details[i])[0][1]]);
+                }
+
+                setOffer(offerToDisplay);
+                setisLoading(false);
+            } catch (error) {
+                console.log(error);
             }
-
-            setOffer(offerToDisplay);
-            setisLoading(false);
         };
 
         fetchData();
@@ -49,7 +53,12 @@ const Offer = () => {
                             {offer.owner.account.avatar && <img src={offer.owner.account.avatar.url} alt={offer.owner.account.username} />}
                             <span>{offer.owner.account.username}</span>
                         </p>
-                        <button>Acheter</button>
+
+                        <h1>{offer.product_name}</h1>
+
+                        <Link to="/payment" state={{ title: offer.product_name, price: offer.product_price, id: offer._id }}>
+                            <button>Acheter</button>
+                        </Link>
                     </aside>
                 </div>
             </main>
