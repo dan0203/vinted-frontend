@@ -1,5 +1,7 @@
 # React + Vite
 
+[![Verify](https://github.com/dan0203/vinted-frontend/actions/workflows/verify.yml/badge.svg)](https://github.com/dan0203/vinted-frontend/actions/workflows/verify.yml)
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
