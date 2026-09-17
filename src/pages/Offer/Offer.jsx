@@ -6,7 +6,7 @@ import axios from 'axios';
 const Offer = () => {
     const params = useParams();
     const [offer, setOffer] = useState({});
-    const [isLoading, setisLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -20,7 +20,7 @@ const Offer = () => {
                 }
 
                 setOffer(offerToDisplay);
-                setisLoading(false);
+                setIsLoading(false);
             } catch (error) {
                 console.log(error);
             }
