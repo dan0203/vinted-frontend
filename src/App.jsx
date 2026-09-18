@@ -1,7 +1,6 @@
 import './App.css';
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router';
-import Cookies from 'js-cookie';
 import Header from './components/Header/Header';
 import Home from './pages/Home/Home';
 import Offer from './pages/Offer/Offer';
@@ -12,26 +11,28 @@ import Payment from './pages/Payment/Payment';
 
 function App() {
     const [search, setSearch] = useState('');
+    const [token, setToken] = useState(null);
 
     const handleToken = token => {
-        if (token === null) {
-            Cookies.remove('token');
-        } else {
-            Cookies.set('token', token);
-        }
+        setToken(token);
     };
 
     return (
         <>
             <Router>
-                <Header search={search} setSearch={setSearch} handleToken={handleToken} />
+                <Header
+                    search={search}
+                    setSearch={setSearch}
+                    handleToken={handleToken}
+                    token={token}
+                />
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/signup" element={<Signup handleToken={handleToken} />} />
                     <Route path="/login" element={<Login handleToken={handleToken} />} />
-                    <Route path="/publish" element={<Publish />} />
+                    <Route path="/publish" element={<Publish token={token} />} />
                     <Route path="/offers/:id" element={<Offer />} />
-                    <Route path="/payment" element={<Payment />} />
+                    <Route path="/payment" element={<Payment token={token} />} />
                     <Route path="*" element={<div className="container">Route not found</div>} />
                 </Routes>
             </Router>

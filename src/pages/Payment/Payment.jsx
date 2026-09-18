@@ -1,17 +1,14 @@
 import './Payment.css';
 import { Navigate, useLocation } from 'react-router';
-import Cookies from 'js-cookie';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from '../../components/CheckoutForm/CheckoutForm';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
-const Payment = () => {
+const Payment = ({ token }) => {
     const location = useLocation();
     const { price, title, id } = location.state;
-
-    const token = Cookies.get('token');
 
     const options = {
         // Type de transaction

@@ -69,3 +69,12 @@ input[type='checkbox'] {
     text-decoration: none;
     color: #2cb1ba;
 }
+
+.login-hint {
+    color: #741212;
+    font-size: 12px;
+    text-align: center;
+    width: 275px;
+    margin-top: -10px;
+    margin-bottom: 20px;
+}

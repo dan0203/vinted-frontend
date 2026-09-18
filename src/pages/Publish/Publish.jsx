@@ -2,9 +2,8 @@ import './Publish.css';
 import { useState } from 'react';
 import { Navigate } from 'react-router';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
-const Publish = () => {
+const Publish = ({ token }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [brand, setBrand] = useState('');
@@ -15,8 +14,6 @@ const Publish = () => {
     const [price, setPrice] = useState('');
     const [newsletter, setNewsletter] = useState(false);
     const [file, setFile] = useState({});
-
-    const token = Cookies.get('token');
 
     return token ? (
         <>

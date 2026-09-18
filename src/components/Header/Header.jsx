@@ -1,10 +1,9 @@
 import './Header.css';
 import { Link, useNavigate } from 'react-router';
-import Cookies from 'js-cookie';
 import logo from '../../assets/images/logo-vinted.png';
 import { HiMagnifyingGlass } from 'react-icons/hi2';
 
-const Header = ({ search, setSearch, handleToken }) => {
+const Header = ({ search, setSearch, handleToken, token }) => {
     const navigate = useNavigate();
 
     return (
@@ -23,15 +22,11 @@ const Header = ({ search, setSearch, handleToken }) => {
                         placeholder="Recherche des articles"
                     />
                 </div>
-                {Cookies.get('token') ? (
+                {token ? (
                     <button
                         className="logout"
                         onClick={() => {
-                            // 1 : supprimer le cookie
                             handleToken(null);
-                            // Cookies.remove('token');
-                            // setIsConnected(false);
-                            // 2 : rediriger vers Home
                             navigate('/');
                         }}
                     >

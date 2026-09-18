@@ -39,8 +39,6 @@ const Signup = ({ handleToken }) => {
                                 // 2 : si la réponse est ok, stocker le token dans un cookie
                                 if (response.data.accessToken) {
                                     handleToken(response.data.accessToken);
-                                    // Cookies.set('token', response.data.token, { expires: 7 });
-                                    // setIsConnected(true);
                                     setError(null);
 
                                     // 3 : rediriger vers Home

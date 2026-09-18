@@ -15,7 +15,22 @@ const Login = ({ handleToken }) => {
             <main className="main-login">
                 <div className="container">
                     <h1>Se connecter</h1>
-                    <ErrorMessage error={error} />
+                    {error?.response?.status === 423 ? (
+                        <p className="error-message">
+                            Compte verrouillé pendant 15 minutes après plusieurs tentatives
+                            échouées. Réessayez plus tard.
+                        </p>
+                    ) : (
+                        <>
+                            <ErrorMessage error={error} />
+                            {error?.response?.status === 403 && (
+                                <p className="login-hint">
+                                    Si vous n'avez pas encore confirmé votre compte, vérifiez vos
+                                    emails pour retrouver le lien de confirmation.
+                                </p>
+                            )}
+                        </>
+                    )}
                     <form
                         onSubmit={async event => {
                             event.preventDefault();
@@ -30,13 +45,12 @@ const Login = ({ handleToken }) => {
                                 const response = await axios.post(
                                     import.meta.env.VITE_API_URL + '/users/login',
                                     data,
+                                    { withCredentials: true },
                                 );
 
-                                // 2 : si la réponse est ok, stocker le token dans un cookie
+                                // 2 : si la réponse est ok, stocker le token
                                 if (response.data.accessToken) {
                                     handleToken(response.data.accessToken);
-                                    // Cookies.set('token', response.data.token, { expires: 7 });
-                                    // setIsConnected(true);
                                     setError(null);
 
                                     // 3 : rediriger vers Home
