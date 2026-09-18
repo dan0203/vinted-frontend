@@ -2,6 +2,7 @@ import './Offer.css';
 import { Link, useParams } from 'react-router';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 
 const DETAIL_LABELS = {
     brand: 'Marque',
@@ -15,6 +16,7 @@ const Offer = () => {
     const params = useParams();
     const [offer, setOffer] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -24,9 +26,11 @@ const Offer = () => {
                 );
 
                 setOffer(response.data);
-                setIsLoading(false);
+                setError(null);
             } catch (error) {
-                console.log(error);
+                setError(error);
+            } finally {
+                setIsLoading(false);
             }
         };
 
@@ -35,6 +39,12 @@ const Offer = () => {
 
     return isLoading ? (
         <p className="loading">Chargement en cours...</p>
+    ) : error ? (
+        <main className="main-offer">
+            <div className="container">
+                <ErrorMessage error={error} />
+            </div>
+        </main>
     ) : (
         <>
             <main className="main-offer">

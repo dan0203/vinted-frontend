@@ -3,10 +3,12 @@ import tear from '../../assets/images/tear.png';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router';
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 
 const Home = () => {
     const [offers, setOffers] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -14,10 +16,11 @@ const Home = () => {
                 const response = await axios.get(import.meta.env.VITE_API_URL + '/offers');
 
                 setOffers(response.data.offers);
-                setIsLoading(false);
+                setError(null);
             } catch (error) {
-                error.message && console.log(error.message);
-                error.response && console.log(error.response.data);
+                setError(error);
+            } finally {
+                setIsLoading(false);
             }
         };
 
@@ -26,6 +29,12 @@ const Home = () => {
 
     return isLoading ? (
         <p className="loading">Chargement en cours...</p>
+    ) : error ? (
+        <main className="main-home">
+            <div className="container">
+                <ErrorMessage error={error} />
+            </div>
+        </main>
     ) : (
         <>
             <main className="main-home">
