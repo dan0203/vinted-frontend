@@ -31,7 +31,7 @@ function App() {
                 />
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/signup" element={<Signup handleToken={handleToken} />} />
+                    <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login handleToken={handleToken} />} />
                     <Route path="/publish" element={<Publish token={token} />} />
                     <Route path="/offers/:id" element={<Offer />} />
