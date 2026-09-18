@@ -87,6 +87,7 @@ const Login = ({ handleToken }) => {
                         <button>Se connecter</button>
                     </form>
                     <Link to="/signup">Pas encore de compte ? Inscris-toi !</Link>
+                    <Link to="/reset-password">Mot de passe oublié ?</Link>
                 </div>
             </main>
         </>

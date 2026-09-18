@@ -10,6 +10,7 @@ import Publish from './pages/Publish/Publish';
 import Payment from './pages/Payment/Payment';
 import Confirm from './pages/Confirm/Confirm';
 import ResendConfirmation from './pages/ResendConfirmation/ResendConfirmation';
+import ResetPassword from './pages/ResetPassword/ResetPassword';
 import { getToken, setToken as setStoredToken, subscribeToken } from './api/client';
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
                     <Route path="/login" element={<Login handleToken={handleToken} />} />
                     <Route path="/confirm/:token" element={<Confirm />} />
                     <Route path="/resend-confirmation" element={<ResendConfirmation />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="/publish" element={<Publish token={token} />} />
                     <Route path="/offers/:id" element={<Offer />} />
                     <Route path="/payment" element={<Payment token={token} />} />
