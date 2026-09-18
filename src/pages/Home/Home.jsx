@@ -41,53 +41,32 @@ const Home = () => {
 
                 <div className="container">
                     {offers
-                        .sort((a, b) => new Date(b.product_date) - new Date(a.product_date))
-                        .map(offer => {
-                            // Reconstitution du tableau des détails du produit pour un affichage plus sûr
-                            offer.productDetails = {};
-
-                            // Pour chaque élément de product_details de l'offre en cours de mapping,
-                            //  on récupère ses pairs key/value,
-                            //  et on crée une entrée dans le tableau productDetails dont :
-                            //      - l'indice sera la key (Object.entries(offer.product_details[i])[0][0])
-                            //      - la valeur sera la value (Object.entries(offer.product_details[i])[0][1])
-                            for (let i = 0; i < offer.product_details.length; i++) {
-                                const entry = Object.entries(offer.product_details[i])[0];
-                                offer.productDetails[entry[0]] = entry[1];
-                            }
-
-                            return (
-                                <Link to={`/offers/${offer._id}`} key={offer._id}>
-                                    <article>
-                                        <p className="user-info">
-                                            {offer.owner.account.avatar && (
-                                                <img
-                                                    src={offer.owner.account.avatar.url}
-                                                    alt={offer.owner.account.username}
-                                                />
-                                            )}
-                                            <span>{offer.owner.account.username}</span>
-                                        </p>
-                                        {offer.product_image && (
+                        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                        .map(offer => (
+                            <Link to={`/offers/${offer._id}`} key={offer._id}>
+                                <article>
+                                    <p className="user-info">
+                                        {offer.owner.account.avatar && (
                                             <img
-                                                src={offer.product_image.url}
-                                                alt={offer.product_description}
+                                                src={offer.owner.account.avatar.url}
+                                                alt={offer.owner.account.username}
                                             />
                                         )}
-                                        <p className="price">{offer.product_price} €</p>
-                                        {/* POINT 2 : on affiche les détails s'ils existent dans le tableau productDetails */}
-                                        {offer.productDetails['TAILLE'] !== undefined && (
-                                            <p className="size">{offer.productDetails['TAILLE']}</p>
-                                        )}
-                                        {offer.productDetails['MARQUE'] !== undefined && (
-                                            <p className="marque">
-                                                {offer.productDetails['MARQUE']}
-                                            </p>
-                                        )}
-                                    </article>
-                                </Link>
-                            );
-                        })}
+                                        <span>{offer.owner.account.username}</span>
+                                    </p>
+                                    {offer.image && (
+                                        <img src={offer.image.url} alt={offer.name} />
+                                    )}
+                                    <p className="price">{offer.price} €</p>
+                                    {offer.details?.size !== undefined && (
+                                        <p className="size">{offer.details.size}</p>
+                                    )}
+                                    {offer.details?.brand !== undefined && (
+                                        <p className="marque">{offer.details.brand}</p>
+                                    )}
+                                </article>
+                            </Link>
+                        ))}
                 </div>
             </main>
         </>

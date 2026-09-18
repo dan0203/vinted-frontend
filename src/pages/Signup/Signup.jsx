@@ -32,13 +32,13 @@ const Signup = ({ handleToken }) => {
 
                                 // 1 : requête bdd ajout utilisateur
                                 const response = await axios.post(
-                                    import.meta.env.VITE_API_URL + '/user/signup',
+                                    import.meta.env.VITE_API_URL + '/users/signup',
                                     data,
                                 );
 
                                 // 2 : si la réponse est ok, stocker le token dans un cookie
-                                if (response.data.token) {
-                                    handleToken(response.data.token);
+                                if (response.data.accessToken) {
+                                    handleToken(response.data.accessToken);
                                     // Cookies.set('token', response.data.token, { expires: 7 });
                                     // setIsConnected(true);
                                     setError(null);

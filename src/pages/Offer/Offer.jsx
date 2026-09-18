@@ -3,6 +3,14 @@ import { Link, useParams } from 'react-router';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const DETAIL_LABELS = {
+    brand: 'Marque',
+    size: 'Taille',
+    color: 'Couleur',
+    condition: 'État',
+    city: 'Emplacement',
+};
+
 const Offer = () => {
     const params = useParams();
     const [offer, setOffer] = useState({});
@@ -14,17 +22,8 @@ const Offer = () => {
                 const response = await axios.get(
                     import.meta.env.VITE_API_URL + '/offers/' + params.id,
                 );
-                const offerToDisplay = response.data;
-                offerToDisplay.productDetails = [];
 
-                for (let i = 0; i < offerToDisplay.product_details.length; i++) {
-                    offerToDisplay.productDetails.push([
-                        Object.entries(offerToDisplay.product_details[i])[0][0],
-                        Object.entries(offerToDisplay.product_details[i])[0][1],
-                    ]);
-                }
-
-                setOffer(offerToDisplay);
+                setOffer(response.data);
                 setIsLoading(false);
             } catch (error) {
                 console.log(error);
@@ -40,20 +39,21 @@ const Offer = () => {
         <>
             <main className="main-offer">
                 <div className="container">
-                    <img src={offer.product_image.url} alt={offer.product_name} />
+                    {offer.image && <img src={offer.image.url} alt={offer.name} />}
                     <aside>
-                        <p className="product_price">{offer.product_price} €</p>
+                        <p className="product_price">{offer.price} €</p>
                         <div className="product_details_wrapper">
-                            {/* on peut aussi mapper et utiliser les entries pour chaque élément */}
-                            {offer.productDetails.map(p => (
-                                <div key={`${p[0]} ${p[1]}`} className="product_details">
-                                    <p className="product_details_key">{p[0]}</p>
-                                    <p className="product_details_value">{p[1]}</p>
+                            {Object.entries(offer.details ?? {}).map(([key, value]) => (
+                                <div key={key} className="product_details">
+                                    <p className="product_details_key">
+                                        {DETAIL_LABELS[key] ?? key}
+                                    </p>
+                                    <p className="product_details_value">{value}</p>
                                 </div>
                             ))}
                         </div>
-                        <p className="product_name">{offer.product_name}</p>
-                        <p className="product_description">{offer.product_description}</p>
+                        <p className="product_name">{offer.name}</p>
+                        <p className="product_description">{offer.description}</p>
                         <p className="user-info">
                             {offer.owner.account.avatar && (
                                 <img
@@ -64,13 +64,13 @@ const Offer = () => {
                             <span>{offer.owner.account.username}</span>
                         </p>
 
-                        <h1>{offer.product_name}</h1>
+                        <h1>{offer.name}</h1>
 
                         <Link
                             to="/payment"
                             state={{
-                                title: offer.product_name,
-                                price: offer.product_price,
+                                title: offer.name,
+                                price: offer.price,
                                 id: offer._id,
                             }}
                         >
