@@ -26,7 +26,12 @@ const Login = ({ handleToken }) => {
                             {error?.response?.status === 403 && (
                                 <p className="login-hint">
                                     Si vous n'avez pas encore confirmé votre compte, vérifiez vos
-                                    emails pour retrouver le lien de confirmation.
+                                    emails pour retrouver le lien de confirmation. Vous pouvez
+                                    aussi{' '}
+                                    <Link to="/resend-confirmation">
+                                        renvoyer l'email de confirmation
+                                    </Link>
+                                    .
                                 </p>
                             )}
                         </>

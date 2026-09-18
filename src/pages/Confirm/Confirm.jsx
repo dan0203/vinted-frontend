@@ -37,6 +37,7 @@ const Confirm = () => {
                     <>
                         <ErrorMessage error={error} />
                         <Link to="/login">Retour à la connexion</Link>
+                        <Link to="/resend-confirmation">Renvoyer l'email de confirmation</Link>
                     </>
                 ) : (
                     <>
