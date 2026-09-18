@@ -2,6 +2,7 @@ import './Header.css';
 import { Link, useNavigate } from 'react-router';
 import logo from '../../assets/images/logo-vinted.png';
 import { HiMagnifyingGlass } from 'react-icons/hi2';
+import client from '../../api/client';
 
 const Header = ({ search, setSearch, handleToken, token }) => {
     const navigate = useNavigate();
@@ -25,9 +26,15 @@ const Header = ({ search, setSearch, handleToken, token }) => {
                 {token ? (
                     <button
                         className="logout"
-                        onClick={() => {
-                            handleToken(null);
-                            navigate('/');
+                        onClick={async () => {
+                            try {
+                                await client.post('/users/logout', {}, { skipAuthRedirect: true });
+                            } catch {
+                                // best-effort: the local session ends either way
+                            } finally {
+                                handleToken(null);
+                                navigate('/');
+                            }
                         }}
                     >
                         Se déconnecter

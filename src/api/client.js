@@ -49,7 +49,9 @@ client.interceptors.response.use(
             return client(originalRequest);
         } catch {
             setToken(null);
-            window.location.assign('/login');
+            if (!originalRequest.skipAuthRedirect) {
+                window.location.assign('/login');
+            }
             throw error;
         }
     },
