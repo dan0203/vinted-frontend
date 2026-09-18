@@ -2,6 +2,7 @@ import './Signup.css';
 import { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router';
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 
 const Signup = ({ handleToken }) => {
     const navigate = useNavigate();
@@ -9,14 +10,14 @@ const Signup = ({ handleToken }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [newsletter, setNewsletter] = useState(false);
-    const [error, setError] = useState('');
+    const [error, setError] = useState(null);
 
     return (
         <>
             <main className="main-signup">
                 <div className="container">
                     <h1>S'inscrire</h1>
-                    {error && <p className="error">{error}</p>}
+                    <ErrorMessage error={error} />
                     <form
                         onSubmit={async event => {
                             event.preventDefault();
@@ -37,15 +38,13 @@ const Signup = ({ handleToken }) => {
                                     handleToken(response.data.token);
                                     // Cookies.set('token', response.data.token, { expires: 7 });
                                     // setIsConnected(true);
-                                    setError('');
+                                    setError(null);
 
                                     // 3 : rediriger vers Home
                                     navigate('/');
                                 }
                             } catch (error) {
-                                error.message && console.log('error.message', error.message);
-                                error.response && console.log('error.response.data', error.response.data);
-                                setError(error.response.data.message);
+                                setError(error);
                             }
                         }}
                     >
