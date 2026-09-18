@@ -30,6 +30,18 @@
             margin-bottom: 25px;
         }
 
+        .offer-status-badge {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #666;
+            background-color: #ebedee;
+            border-radius: 3px;
+            padding: 4px 8px;
+            margin-left: 10px;
+        }
+
         .product_details_wrapper {
             margin-bottom: 55px;
             padding-bottom: 45px;
@@ -92,6 +104,13 @@
             background-color: #2cb1ba;
             font-size: 16px;
             padding: 12px 0;
+        }
+
+        button:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            background-color: #fff;
+            cursor: not-allowed;
         }
     }
 }

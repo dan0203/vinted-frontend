@@ -12,6 +12,11 @@ const DETAIL_LABELS = {
     city: 'Emplacement',
 };
 
+const STATUS_LABELS = {
+    reserved: 'Réservé',
+    sold: 'Vendu',
+};
+
 const Offer = () => {
     const params = useParams();
     const [offer, setOffer] = useState({});
@@ -51,7 +56,14 @@ const Offer = () => {
                 <div className="container">
                     {offer.image && <img src={offer.image.url} alt={offer.name} />}
                     <aside>
-                        <p className="product_price">{offer.price} €</p>
+                        <p className="product_price">
+                            {offer.price} €
+                            {offer.status && offer.status !== 'available' && (
+                                <span className="offer-status-badge">
+                                    {STATUS_LABELS[offer.status] ?? offer.status}
+                                </span>
+                            )}
+                        </p>
                         <div className="product_details_wrapper">
                             {Object.entries(offer.details ?? {}).map(([key, value]) => (
                                 <div key={key} className="product_details">
@@ -76,16 +88,20 @@ const Offer = () => {
 
                         <h1>{offer.name}</h1>
 
-                        <Link
-                            to="/payment"
-                            state={{
-                                title: offer.name,
-                                price: offer.price,
-                                id: offer._id,
-                            }}
-                        >
-                            <button>Acheter</button>
-                        </Link>
+                        {!offer.status || offer.status === 'available' ? (
+                            <Link
+                                to="/payment"
+                                state={{
+                                    title: offer.name,
+                                    price: offer.price,
+                                    id: offer._id,
+                                }}
+                            >
+                                <button>Acheter</button>
+                            </Link>
+                        ) : (
+                            <button disabled>Acheter</button>
+                        )}
                     </aside>
                 </div>
             </main>
