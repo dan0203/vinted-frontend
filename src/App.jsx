@@ -8,6 +8,7 @@ import Signup from './pages/Signup/Signup';
 import Login from './pages/Login/Login';
 import Publish from './pages/Publish/Publish';
 import Payment from './pages/Payment/Payment';
+import Confirm from './pages/Confirm/Confirm';
 import { getToken, setToken as setStoredToken, subscribeToken } from './api/client';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login handleToken={handleToken} />} />
+                    <Route path="/confirm/:token" element={<Confirm />} />
                     <Route path="/publish" element={<Publish token={token} />} />
                     <Route path="/offers/:id" element={<Offer />} />
                     <Route path="/payment" element={<Payment token={token} />} />
