@@ -7,7 +7,8 @@ const ErrorMessage = ({ error }) => {
         return null;
     }
 
-    const message = error?.response?.data?.message || (typeof error === 'string' && error) || FALLBACK_MESSAGE;
+    const message =
+        error?.response?.data?.message || (typeof error === 'string' && error) || FALLBACK_MESSAGE;
 
     return <p className="error-message">{message}</p>;
 };

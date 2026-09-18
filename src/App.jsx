@@ -11,16 +11,13 @@ import Publish from './pages/Publish/Publish';
 import Payment from './pages/Payment/Payment';
 
 function App() {
-    const [isConnected, setIsConnected] = useState(false);
     const [search, setSearch] = useState('');
 
     const handleToken = token => {
         if (token === null) {
             Cookies.remove('token');
-            setIsConnected(false);
         } else {
             Cookies.set('token', token);
-            setIsConnected(true);
         }
     };
 

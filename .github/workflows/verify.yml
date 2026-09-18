@@ -1,21 +1,21 @@
 name: Verify
 
 on:
-  pull_request:
-  push:
-    branches: [master]
+    pull_request:
+    push:
+        branches: [master]
 
 permissions:
-  contents: read
+    contents: read
 
 jobs:
-  verify:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'yarn'
-      - run: yarn install --frozen-lockfile
-      - run: yarn verify
+    verify:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
+                  cache: 'yarn'
+            - run: yarn install --frozen-lockfile
+            - run: yarn verify

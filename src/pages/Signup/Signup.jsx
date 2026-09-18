@@ -31,7 +31,10 @@ const Signup = ({ handleToken }) => {
                                 };
 
                                 // 1 : requête bdd ajout utilisateur
-                                const response = await axios.post(import.meta.env.VITE_API_URL + '/user/signup', data);
+                                const response = await axios.post(
+                                    import.meta.env.VITE_API_URL + '/user/signup',
+                                    data,
+                                );
 
                                 // 2 : si la réponse est ok, stocker le token dans un cookie
                                 if (response.data.token) {
@@ -87,7 +90,11 @@ const Signup = ({ handleToken }) => {
                             />
                             <label htmlFor="newsletter">S'inscrire à notre neswletter</label>
                         </div>
-                        <p>En m'inscrivant je confirme avoir lu et accepté les Termes & Conditions et Politique de Confidentialité de Vinted. Je confirme avoir au moins 18 ans.</p>
+                        <p>
+                            En m'inscrivant je confirme avoir lu et accepté les Termes & Conditions
+                            et Politique de Confidentialité de Vinted. Je confirme avoir au moins 18
+                            ans.
+                        </p>
                         <button>S'inscrire</button>
                     </form>
                     <Link to="/login">Tu as déjà un compte ? Connecte-toi !</Link>

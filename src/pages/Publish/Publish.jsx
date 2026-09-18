@@ -39,16 +39,21 @@ const Publish = () => {
                             formData.append('city', city);
 
                             try {
-                                const response = await axios.post(import.meta.env.VITE_API_URL + '/offers/publish', formData, {
-                                    headers: {
-                                        authorization: `Bearer ${token}`,
+                                const response = await axios.post(
+                                    import.meta.env.VITE_API_URL + '/offers/publish',
+                                    formData,
+                                    {
+                                        headers: {
+                                            authorization: `Bearer ${token}`,
+                                        },
                                     },
-                                });
+                                );
 
                                 console.log(response.data);
                             } catch (error) {
                                 error.message && console.log('error.message', error.message);
-                                error.response && console.log('error.response.data', error.response.data);
+                                error.response &&
+                                    console.log('error.response.data', error.response.data);
                             }
                         }}
                     >
@@ -168,7 +173,9 @@ const Publish = () => {
                                     setNewsletter(event.target.checked);
                                 }}
                             />
-                            <label htmlFor="newsletter">Je suis intéressé(e) par les échanges</label>
+                            <label htmlFor="newsletter">
+                                Je suis intéressé(e) par les échanges
+                            </label>
                         </section>
 
                         <section>

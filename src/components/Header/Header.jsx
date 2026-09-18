@@ -15,7 +15,13 @@ const Header = ({ search, setSearch, handleToken }) => {
                 </Link>
                 <div className="search">
                     <HiMagnifyingGlass className="magnifying-glass" />
-                    <input type="text" name="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Recherche des articles" />
+                    <input
+                        type="text"
+                        name="search"
+                        value={search}
+                        onChange={event => setSearch(event.target.value)}
+                        placeholder="Recherche des articles"
+                    />
                 </div>
                 {Cookies.get('token') ? (
                     <button

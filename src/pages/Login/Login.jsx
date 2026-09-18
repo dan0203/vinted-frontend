@@ -27,7 +27,10 @@ const Login = ({ handleToken }) => {
                                 };
 
                                 // 1 : requête bdd ajout utilisateur
-                                const response = await axios.post(import.meta.env.VITE_API_URL + '/user/login', data);
+                                const response = await axios.post(
+                                    import.meta.env.VITE_API_URL + '/user/login',
+                                    data,
+                                );
 
                                 // 2 : si la réponse est ok, stocker le token dans un cookie
                                 if (response.data.token) {

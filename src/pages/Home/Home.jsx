@@ -60,14 +60,30 @@ const Home = () => {
                                 <Link to={`/offers/${offer._id}`} key={offer._id}>
                                     <article>
                                         <p className="user-info">
-                                            {offer.owner.account.avatar && <img src={offer.owner.account.avatar.url} alt={offer.owner.account.username} />}
+                                            {offer.owner.account.avatar && (
+                                                <img
+                                                    src={offer.owner.account.avatar.url}
+                                                    alt={offer.owner.account.username}
+                                                />
+                                            )}
                                             <span>{offer.owner.account.username}</span>
                                         </p>
-                                        {offer.product_image && <img src={offer.product_image.url} alt={offer.product_description} />}
+                                        {offer.product_image && (
+                                            <img
+                                                src={offer.product_image.url}
+                                                alt={offer.product_description}
+                                            />
+                                        )}
                                         <p className="price">{offer.product_price} €</p>
                                         {/* POINT 2 : on affiche les détails s'ils existent dans le tableau productDetails */}
-                                        {offer.productDetails['TAILLE'] !== undefined && <p className="size">{offer.productDetails['TAILLE']}</p>}
-                                        {offer.productDetails['MARQUE'] !== undefined && <p className="marque">{offer.productDetails['MARQUE']}</p>}
+                                        {offer.productDetails['TAILLE'] !== undefined && (
+                                            <p className="size">{offer.productDetails['TAILLE']}</p>
+                                        )}
+                                        {offer.productDetails['MARQUE'] !== undefined && (
+                                            <p className="marque">
+                                                {offer.productDetails['MARQUE']}
+                                            </p>
+                                        )}
                                     </article>
                                 </Link>
                             );

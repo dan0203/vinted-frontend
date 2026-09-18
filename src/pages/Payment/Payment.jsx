@@ -21,9 +21,7 @@ const Payment = () => {
         // Devise de la transaction
         currency: 'eur',
         // On peut customiser l'apparence ici
-        appearance: {
-            /*...*/
-        },
+        appearance: {/*...*/},
     };
 
     return token ? (
@@ -47,7 +45,9 @@ const Payment = () => {
                         <p>Total</p> <p>{(price + 0.4 + 0.8).toFixed(2)} €</p>
                     </div>
                     <p>
-                        Il ne vous reste plus qu'une étape pour vous offrir {title}. Vous allez payer {(price + 0.4 + 0.8).toFixed(2)} € (frais de protection et frais de port inclus)
+                        Il ne vous reste plus qu'une étape pour vous offrir {title}. Vous allez
+                        payer {(price + 0.4 + 0.8).toFixed(2)} € (frais de protection et frais de
+                        port inclus)
                     </p>
                 </section>
 

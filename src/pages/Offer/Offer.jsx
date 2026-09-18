@@ -1,5 +1,5 @@
 import './Offer.css';
-import { data, Link, useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -11,12 +11,17 @@ const Offer = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(import.meta.env.VITE_API_URL + '/offers/' + params.id);
+                const response = await axios.get(
+                    import.meta.env.VITE_API_URL + '/offers/' + params.id,
+                );
                 const offerToDisplay = response.data;
                 offerToDisplay.productDetails = [];
 
                 for (let i = 0; i < offerToDisplay.product_details.length; i++) {
-                    offerToDisplay.productDetails.push([Object.entries(offerToDisplay.product_details[i])[0][0], Object.entries(offerToDisplay.product_details[i])[0][1]]);
+                    offerToDisplay.productDetails.push([
+                        Object.entries(offerToDisplay.product_details[i])[0][0],
+                        Object.entries(offerToDisplay.product_details[i])[0][1],
+                    ]);
                 }
 
                 setOffer(offerToDisplay);
@@ -50,13 +55,25 @@ const Offer = () => {
                         <p className="product_name">{offer.product_name}</p>
                         <p className="product_description">{offer.product_description}</p>
                         <p className="user-info">
-                            {offer.owner.account.avatar && <img src={offer.owner.account.avatar.url} alt={offer.owner.account.username} />}
+                            {offer.owner.account.avatar && (
+                                <img
+                                    src={offer.owner.account.avatar.url}
+                                    alt={offer.owner.account.username}
+                                />
+                            )}
                             <span>{offer.owner.account.username}</span>
                         </p>
 
                         <h1>{offer.product_name}</h1>
 
-                        <Link to="/payment" state={{ title: offer.product_name, price: offer.product_price, id: offer._id }}>
+                        <Link
+                            to="/payment"
+                            state={{
+                                title: offer.product_name,
+                                price: offer.product_price,
+                                id: offer._id,
+                            }}
+                        >
                             <button>Acheter</button>
                         </Link>
                     </aside>
