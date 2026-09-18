@@ -1,7 +1,7 @@
 import './Publish.css';
 import { useState } from 'react';
 import { Navigate } from 'react-router';
-import axios from 'axios';
+import client from '../../api/client';
 
 const Publish = ({ token }) => {
     const [title, setTitle] = useState('');
@@ -36,15 +36,7 @@ const Publish = ({ token }) => {
                             formData.append('city', city);
 
                             try {
-                                const response = await axios.post(
-                                    import.meta.env.VITE_API_URL + '/offers/publish',
-                                    formData,
-                                    {
-                                        headers: {
-                                            authorization: `Bearer ${token}`,
-                                        },
-                                    },
-                                );
+                                const response = await client.post('/offers/publish', formData);
 
                                 console.log(response.data);
                             } catch (error) {

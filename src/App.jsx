@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router';
 import Header from './components/Header/Header';
 import Home from './pages/Home/Home';
@@ -8,13 +8,16 @@ import Signup from './pages/Signup/Signup';
 import Login from './pages/Login/Login';
 import Publish from './pages/Publish/Publish';
 import Payment from './pages/Payment/Payment';
+import { getToken, setToken as setStoredToken, subscribeToken } from './api/client';
 
 function App() {
     const [search, setSearch] = useState('');
-    const [token, setToken] = useState(null);
+    const [token, setToken] = useState(getToken());
+
+    useEffect(() => subscribeToken(setToken), []);
 
     const handleToken = token => {
-        setToken(token);
+        setStoredToken(token);
     };
 
     return (
