@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test('shows an error message instead of a stuck spinner when the offers fetch fails', async ({
     page,
 }) => {
-    await page.route('**/offers', route =>
+    await page.route('**/offers*', route =>
         route.fulfill({
             status: 500,
             contentType: 'application/json',

@@ -33,7 +33,7 @@ function App() {
                     token={token}
                 />
                 <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={<Home search={search} />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login handleToken={handleToken} />} />
                     <Route path="/confirm/:token" element={<Confirm />} />
