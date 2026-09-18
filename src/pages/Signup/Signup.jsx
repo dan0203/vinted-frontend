@@ -19,8 +19,8 @@ const Signup = () => {
                     <h1>S'inscrire</h1>
                     {submitted ? (
                         <p>
-                            Merci de votre inscription ! Un email de confirmation vous a été
-                            envoyé, cliquez sur le lien qu'il contient pour activer votre compte.
+                            Merci de votre inscription ! Un email de confirmation vous a été envoyé,
+                            cliquez sur le lien qu'il contient pour activer votre compte.
                         </p>
                     ) : (
                         <>
@@ -92,7 +92,7 @@ const Signup = () => {
                                         }}
                                     />
                                     <label htmlFor="newsletter">
-                                        S'inscrire à notre neswletter
+                                        S'inscrire à notre newsletter
                                     </label>
                                 </div>
                                 <p>
