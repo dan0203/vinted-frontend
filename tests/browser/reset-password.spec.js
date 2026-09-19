@@ -65,8 +65,15 @@ test('blocks submit client-side when passwords do not match', async ({ page }) =
 });
 
 test('disables the submit button while the request is in flight', async ({ page }) => {
+    // The request is held open until the assertion has run, rather than for a
+    // fixed delay: under load the response landed first, the form advanced and
+    // the button was gone, so the test failed with "element(s) not found".
+    let release;
+    const held = new Promise(resolve => {
+        release = resolve;
+    });
     await page.route('**/users/reset/request', async route => {
-        await new Promise(resolve => setTimeout(resolve, 300));
+        await held;
         await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
     });
 
@@ -76,6 +83,7 @@ test('disables the submit button while the request is in flight', async ({ page 
     await button.click();
 
     await expect(button).toBeDisabled();
+    release();
 });
 
 test('shows an error message when the confirm request fails', async ({ page }) => {

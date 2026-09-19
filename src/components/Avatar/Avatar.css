@@ -1,0 +1,15 @@
+/* The size stays with each page, since the seller row is 25px on a Home card
+   and 50px on the offer detail page. */
+.avatar {
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.avatar-initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ebedee;
+    color: #999;
+    font-weight: bold;
+}

@@ -65,6 +65,11 @@ const waitForInitialLoad = async page => {
     await expect(page.getByText('Chargement en cours...')).toHaveCount(0);
 };
 
+// Home debounces every fetch after the first by 400ms, so these tests used to
+// wait a fixed 600ms before asserting. Under load the request had not left yet
+// and the assertions read the previous state: two of three runs failed. Poll the
+// captured request instead, which waits for the thing that actually matters.
+
 const priceTexts = async page =>
     (await page.locator('.main-home .price').allTextContents()).map(text =>
         Number(text.replace(' €', '')),
@@ -78,19 +83,19 @@ test('search filters the list via ?title=, clearing restores it', async ({ page 
     await expect(page.locator('.main-home article')).toHaveCount(3);
 
     await page.getByPlaceholder('Recherche des articles').fill('Robe');
-    await page.waitForTimeout(600);
 
-    expect(getLastUrl()).toContain('title=Robe');
+    await expect.poll(getLastUrl).toContain('title=Robe');
     await expect(page.locator('.main-home article')).toHaveCount(1);
     await expect(page.locator('.main-home .price')).toHaveText('25 €');
 
     await page.getByPlaceholder('Recherche des articles').fill('');
-    await page.waitForTimeout(600);
+
+    await expect.poll(getLastUrl).not.toContain('title=');
     await expect(page.locator('.main-home article')).toHaveCount(3);
 });
 
 test('price range filter narrows results via ?priceMin=&priceMax=', async ({ page }) => {
-    await installOffersMock(page);
+    const { getLastUrl } = await installOffersMock(page);
 
     await page.goto('/');
     await waitForInitialLoad(page);
@@ -98,14 +103,15 @@ test('price range filter narrows results via ?priceMin=&priceMax=', async ({ pag
 
     await page.getByPlaceholder('Prix min').fill('100');
     await page.getByPlaceholder('Prix max').fill('130');
-    await page.waitForTimeout(600);
 
+    await expect.poll(getLastUrl).toContain('priceMax=130');
     await expect(page.locator('.main-home article')).toHaveCount(1);
     await expect(page.locator('.main-home .price')).toHaveText('120 €');
 
     await page.getByPlaceholder('Prix min').fill('');
     await page.getByPlaceholder('Prix max').fill('');
-    await page.waitForTimeout(600);
+
+    await expect.poll(getLastUrl).not.toContain('price');
     await expect(page.locator('.main-home article')).toHaveCount(3);
 });
 
@@ -118,31 +124,30 @@ test('sort select reorders via server, default sends no sort param', async ({ pa
     expect(await priceTexts(page)).toEqual([40, 120, 25]);
 
     await page.locator('.main-home select').selectOption('price-asc');
-    await page.waitForTimeout(600);
-    expect(getLastUrl()).toContain('sort=price-asc');
-    expect(await priceTexts(page)).toEqual([25, 40, 120]);
+    await expect.poll(getLastUrl).toContain('sort=price-asc');
+    await expect.poll(() => priceTexts(page)).toEqual([25, 40, 120]);
 
     await page.locator('.main-home select').selectOption('price-desc');
-    await page.waitForTimeout(600);
-    expect(getLastUrl()).toContain('sort=price-desc');
-    expect(await priceTexts(page)).toEqual([120, 40, 25]);
+    await expect.poll(getLastUrl).toContain('sort=price-desc');
+    await expect.poll(() => priceTexts(page)).toEqual([120, 40, 25]);
 });
 
 test('empty-results state shows when no offers match, and clears', async ({ page }) => {
-    await installOffersMock(page);
+    const { getLastUrl } = await installOffersMock(page);
 
     await page.goto('/');
     await waitForInitialLoad(page);
     await expect(page.locator('.main-home article')).toHaveCount(3);
 
     await page.getByPlaceholder('Recherche des articles').fill('zzz-no-such-offer-zzz');
-    await page.waitForTimeout(600);
 
+    await expect.poll(getLastUrl).toContain('title=zzz-no-such-offer-zzz');
     await expect(page.getByText('Aucun article ne correspond à votre recherche.')).toBeVisible();
     await expect(page.locator('.main-home article')).toHaveCount(0);
 
     await page.getByPlaceholder('Recherche des articles').fill('');
-    await page.waitForTimeout(600);
+
+    await expect.poll(getLastUrl).not.toContain('title=');
     await expect(page.locator('.main-home article')).toHaveCount(3);
 });
 
@@ -181,19 +186,16 @@ test('pagination pages through mocked multi-page results and disables at both en
     await expect(page.getByRole('button', { name: 'Suivant' })).toBeEnabled();
 
     await page.getByRole('button', { name: 'Suivant' }).click();
-    await page.waitForTimeout(600);
-    expect(requestedPage).toBe('2');
+    await expect.poll(() => requestedPage).toBe('2');
     await expect(page.getByText('Page 2 / 3')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Précédent' })).toBeEnabled();
     await expect(page.getByRole('button', { name: 'Suivant' })).toBeEnabled();
 
     await page.getByRole('button', { name: 'Suivant' }).click();
-    await page.waitForTimeout(600);
-    expect(requestedPage).toBe('3');
+    await expect.poll(() => requestedPage).toBe('3');
     await expect(page.getByText('Page 3 / 3')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Suivant' })).toBeDisabled();
 
     await page.getByRole('button', { name: 'Précédent' }).click();
-    await page.waitForTimeout(600);
-    expect(requestedPage).toBe('2');
+    await expect.poll(() => requestedPage).toBe('2');
 });

@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { PNG } from './fixtures';
 
 const OWNER = { account: { username: 'seller', avatar: null } };
 const IMAGE = { url: 'https://example.com/img.jpg' };
@@ -93,14 +94,18 @@ const buildGalleryOffer = pictures => ({
     pictures,
 });
 
-const mockOffer = (page, offer) =>
-    page.route(`${API_URL}/offers/*`, route =>
+const mockOffer = async (page, offer) => {
+    await page.route('**res.cloudinary.com/**', route =>
+        route.fulfill({ status: 200, contentType: 'image/png', body: PNG }),
+    );
+    await page.route(`${API_URL}/offers/*`, route =>
         route.fulfill({
             status: 200,
             contentType: 'application/json',
             body: JSON.stringify(offer),
         }),
     );
+};
 
 test('shows a thumbnail per picture and swaps the main image when one is clicked', async ({
     page,
@@ -207,7 +212,7 @@ test('renders no thumbnail strip for an offer without secondary pictures', async
     await expect(page.locator('.offer-gallery-thumbs button')).toHaveCount(0);
 });
 
-test('renders no image at all for an offer with no photo', async ({ page }) => {
+test('shows the placeholder instead of an image for an offer with no photo', async ({ page }) => {
     // A photoless offer is a valid document. Mongoose materialises imageSchema's
     // `tags: [String]`, so the API sends `image: {tags: []}`, not `{}`: the
     // emptiness test has to be a usable url, not the key count.
@@ -216,6 +221,82 @@ test('renders no image at all for an offer with no photo', async ({ page }) => {
     await page.goto('/offers/64a000000000000000000000');
 
     await expect(page.locator('main.main-offer')).toBeVisible();
-    await expect(page.locator('.offer-gallery')).toHaveCount(0);
+    await expect(page.locator('.offer-gallery img')).toHaveCount(0);
+    await expect(page.locator('.offer-gallery-empty')).toHaveText('Pas de photo');
     await expect(page.getByRole('button', { name: 'Acheter' })).toBeEnabled();
+});
+
+test('replaces a failing picture in place, keeping the thumbnail numbering', async ({ page }) => {
+    // In place, never removed from the list: removing an entry would renumber
+    // every `Photo N sur T` label under the visitor.
+    const pictures = [buildPicture('pictures/1'), buildPicture('pictures/2')];
+    await mockOffer(page, buildGalleryOffer(pictures));
+    await page.route(buildPicture('main').secure_url, route => route.abort());
+
+    await page.goto('/offers/64a000000000000000000000');
+
+    await expect(page.locator('.offer-gallery-empty')).toHaveText('Image indisponible');
+    await expect(page.locator('img.offer-gallery-main')).toHaveCount(0);
+    await expect(page.locator('.offer-gallery-thumbs button')).toHaveCount(3);
+    await expect(page.getByRole('button', { name: 'Photo 3 sur 3' })).toBeVisible();
+
+    // The other pictures still work.
+    await page.getByRole('button', { name: 'Photo 2 sur 3' }).click();
+    await expect(page.locator('img.offer-gallery-main')).toHaveAttribute(
+        'src',
+        pictures[0].secure_url,
+    );
+});
+
+test('replaces a failing thumbnail in place, keeping the strip intact', async ({ page }) => {
+    // The thumbnail asks Cloudinary for a crop, so its url differs from the main
+    // image's: one can die while the other loads, and only the tile falls back.
+    const picture = buildPicture('pictures/1');
+    const thumbnailUrl = picture.secure_url.replace(
+        '/image/upload/',
+        '/image/upload/w_144,h_192,c_fill/',
+    );
+    await mockOffer(page, buildGalleryOffer([picture]));
+    await page.route(thumbnailUrl, route => route.abort());
+
+    await page.goto('/offers/64a000000000000000000000');
+
+    await expect(page.locator('.offer-gallery-thumbs button')).toHaveCount(2);
+    await expect(page.locator('.offer-gallery-thumb-empty')).toHaveCount(1);
+    await expect(page.getByRole('button', { name: 'Photo 2 sur 2' })).toBeVisible();
+    // The main image of that same picture is a different url and still loads.
+    await expect(page.locator('img.offer-gallery-main')).toHaveAttribute(
+        'src',
+        buildPicture('main').secure_url,
+    );
+});
+
+test('falls back to the seller initial when there is no avatar', async ({ page }) => {
+    // An avatarless account sends `avatar: {tags: []}`, which is truthy.
+    await mockOffer(page, {
+        ...buildGalleryOffer([]),
+        owner: { _id: 'u1', account: { username: 'nina_depot', avatar: { tags: [] } } },
+    });
+
+    await page.goto('/offers/64a000000000000000000000');
+
+    await expect(page.locator('.user-info img')).toHaveCount(0);
+    await expect(page.locator('.user-info .avatar-initial')).toHaveText('N');
+    await expect(page.getByText('nina_depot')).toBeVisible();
+});
+
+test('falls back to the seller initial when the avatar fails to load', async ({ page }) => {
+    // Same rule as a missing avatar, so a dead asset and no asset look alike.
+    const avatar = buildPicture('avatar');
+    await mockOffer(page, {
+        ...buildGalleryOffer([]),
+        owner: { _id: 'u1', account: { username: 'nina_depot', avatar } },
+    });
+    await page.route(avatar.secure_url, route => route.abort());
+
+    await page.goto('/offers/64a000000000000000000000');
+
+    await expect(page.locator('.user-info img')).toHaveCount(0);
+    await expect(page.locator('.user-info .avatar-initial')).toHaveText('N');
+    await expect(page.getByText('nina_depot')).toBeVisible();
 });

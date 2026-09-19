@@ -3,6 +3,9 @@ import tear from '../../assets/images/tear.png';
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router';
+import { imageUrl } from '../../utils/images';
+import { useBrokenUrls } from '../../utils/useBrokenUrls';
+import Avatar from '../../components/Avatar/Avatar';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 
 const Home = ({ search }) => {
@@ -14,6 +17,7 @@ const Home = ({ search }) => {
     const [sort, setSort] = useState('');
     const [page, setPage] = useState(1);
     const [pageCount, setPageCount] = useState(1);
+    const { usable, markBroken, reset: resetBrokenUrls } = useBrokenUrls();
 
     const filterKey = `${search}|${priceMin}|${priceMax}|${sort}`;
     const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
@@ -52,6 +56,7 @@ const Home = ({ search }) => {
                 if (requestId !== requestIdRef.current) return;
 
                 setOffers(response.data.offers);
+                resetBrokenUrls();
                 setPageCount(response.data.totalPages || 1);
                 setError(null);
             } catch (error) {
@@ -75,7 +80,7 @@ const Home = ({ search }) => {
 
         const timeout = setTimeout(fetchData, 400);
         return () => clearTimeout(timeout);
-    }, [search, priceMin, priceMax, sort, page]);
+    }, [search, priceMin, priceMax, sort, page, resetBrokenUrls]);
 
     return isLoading ? (
         <p className="loading">Chargement en cours...</p>
@@ -133,16 +138,21 @@ const Home = ({ search }) => {
                                 <Link to={`/offers/${offer._id}`} key={offer._id}>
                                     <article>
                                         <p className="user-info">
-                                            {offer.owner.account.avatar && (
-                                                <img
-                                                    src={offer.owner.account.avatar.url}
-                                                    alt={offer.owner.account.username}
-                                                />
-                                            )}
+                                            <Avatar account={offer.owner.account} />
                                             <span>{offer.owner.account.username}</span>
                                         </p>
-                                        {offer.image && (
-                                            <img src={offer.image.url} alt={offer.name} />
+                                        {usable(imageUrl(offer.image)) ? (
+                                            <img
+                                                src={imageUrl(offer.image)}
+                                                alt={offer.name}
+                                                onError={() => markBroken(imageUrl(offer.image))}
+                                            />
+                                        ) : (
+                                            <p className="no-photo">
+                                                {imageUrl(offer.image)
+                                                    ? 'Image indisponible'
+                                                    : 'Pas de photo'}
+                                            </p>
                                         )}
                                         <p className="price">{offer.price} €</p>
                                         {offer.details?.size !== undefined && (
