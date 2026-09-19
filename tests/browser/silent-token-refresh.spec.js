@@ -78,3 +78,23 @@ test('redirects to /login when the refresh itself fails', async ({ page }) => {
 
     await expect(page).toHaveURL(/\/login$/);
 });
+
+// The refresh is bounded (`timeout: 5000` in `requestRefresh`), and the bound is
+// shared with the page-load bootstrap. This case pins what that costs on this
+// path: a refresh that never answers ends the session and sends the visitor to
+// /login, where it used to leave the request pending for good. If the two calls
+// are ever split again so only the bootstrap stays bounded, this test fails.
+test('sends the visitor to /login when the refresh never answers', async ({ page }) => {
+    await loginThenGoToPublish(page);
+
+    await page.route('**/offers/publish', route =>
+        route.fulfill({ status: 401, contentType: 'application/json', body: '{}' }),
+    );
+    // Never fulfilled: only the client's own timeout ends it.
+    await page.route('**/users/refresh', () => {});
+
+    await submitPublish(page);
+
+    // Generous, because this waits out the client timeout on purpose.
+    await expect(page).toHaveURL(/\/login$/, { timeout: 15000 });
+});
