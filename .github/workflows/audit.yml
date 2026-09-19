@@ -1,0 +1,24 @@
+name: Audit
+
+# Kept out of Verify so a newly published advisory cannot block an unrelated
+# pull request. Here the failure is the point: it reports on the dependency
+# tree as it stands, on a schedule rather than on someone else's commit.
+on:
+    schedule:
+        - cron: '0 6 * * 1'
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+jobs:
+    audit:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
+                  cache: 'yarn'
+            - run: yarn install --frozen-lockfile
+            - run: yarn audit
