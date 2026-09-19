@@ -302,7 +302,9 @@ test('lets a sold offer be favorited, with Acheter disabled beside it', async ({
 // Finding F-28: the list shows one shared message above the grid, so a heart
 // several rows down could revert with its only explanation off-screen. Twenty
 // cards put the last one well below the fold, which is the case that failed.
-test('brings the failure message into view when a heart low on the list fails', async ({ page }) => {
+test('brings the failure message into view when a heart low on the list fails', async ({
+    page,
+}) => {
     const many = Array.from({ length: 20 }, (_, index) => ({
         ...OFFER,
         _id: `64d00000000000000000${String(index).padStart(4, '0')}`,

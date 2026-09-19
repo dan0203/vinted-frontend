@@ -10,7 +10,7 @@
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "preview": "vite preview",
-        "verify": "vite build",
+        "verify": "prettier --check . && vite build",
         "test:browser": "playwright test"
     },
     "dependencies": {

@@ -42,8 +42,8 @@ const ResetPassword = () => {
                             }}
                         >
                             <p>
-                                Indiquez votre email, nous vous enverrons un code pour
-                                réinitialiser votre mot de passe.
+                                Indiquez votre email, nous vous enverrons un code pour réinitialiser
+                                votre mot de passe.
                             </p>
                             <input
                                 type="email"
@@ -63,9 +63,7 @@ const ResetPassword = () => {
                     <>
                         <ErrorMessage error={error} />
                         {passwordMismatch && (
-                            <p className="field-error">
-                                Les mots de passe ne correspondent pas.
-                            </p>
+                            <p className="field-error">Les mots de passe ne correspondent pas.</p>
                         )}
                         <form
                             onSubmit={async event => {

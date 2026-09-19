@@ -52,10 +52,7 @@ test('keeps the Buy link enabled for an available offer', async ({ page }) => {
     await expect(page.locator('main.main-offer')).toBeVisible();
     const buyButton = page.getByRole('button', { name: 'Acheter' });
     await expect(buyButton).toBeEnabled();
-    await expect(page.getByRole('link', { name: 'Acheter' })).toHaveAttribute(
-        'href',
-        '/payment',
-    );
+    await expect(page.getByRole('link', { name: 'Acheter' })).toHaveAttribute('href', '/payment');
 });
 
 test('shows an error message instead of a stuck spinner when the offer fetch fails', async ({
@@ -140,7 +137,11 @@ test('thumbnails are reachable by Tab and activate with Enter and Space', async 
 
     const mainImage = page.locator('img.offer-gallery-main');
     const firstThumb = page.getByRole('button', { name: 'Photo 1 sur 3' });
-    for (let i = 0; i < 25 && !(await firstThumb.evaluate(el => el === document.activeElement)); i++) {
+    for (
+        let i = 0;
+        i < 25 && !(await firstThumb.evaluate(el => el === document.activeElement));
+        i++
+    ) {
         await page.keyboard.press('Tab');
     }
     await expect(firstThumb).toBeFocused();
@@ -160,7 +161,9 @@ test('thumbnails are reachable by Tab and activate with Enter and Space', async 
     await expect(mainImage).toHaveAttribute('src', pictures[1].secure_url);
 });
 
-test('thumbnails request a small Cloudinary crop, the main image the original', async ({ page }) => {
+test('thumbnails request a small Cloudinary crop, the main image the original', async ({
+    page,
+}) => {
     await mockOffer(page, buildGalleryOffer([buildPicture('pictures/1')]));
 
     await page.goto('/offers/64a000000000000000000000');
@@ -170,7 +173,9 @@ test('thumbnails request a small Cloudinary crop, the main image the original', 
         buildPicture('main').secure_url,
     );
     const thumbSrcs = await page.evaluate(() =>
-        [...document.querySelectorAll('.offer-gallery-thumbs img')].map(img => img.getAttribute('src')),
+        [...document.querySelectorAll('.offer-gallery-thumbs img')].map(img =>
+            img.getAttribute('src'),
+        ),
     );
     expect(thumbSrcs).toHaveLength(2);
     for (const src of thumbSrcs) {
@@ -186,7 +191,8 @@ test('handles an offer whose main image is repeated in pictures', async ({ page 
     const keyErrors = [];
     page.on(
         'console',
-        msg => msg.type() === 'error' && msg.text().includes('same key') && keyErrors.push(msg.text()),
+        msg =>
+            msg.type() === 'error' && msg.text().includes('same key') && keyErrors.push(msg.text()),
     );
 
     const duplicated = buildPicture('main');

@@ -148,9 +148,7 @@ const Home = ({ search }) => {
 
                 {offers.length === 0 ? (
                     <div className="container">
-                        <p className="no-results">
-                            Aucun article ne correspond à votre recherche.
-                        </p>
+                        <p className="no-results">Aucun article ne correspond à votre recherche.</p>
                     </div>
                 ) : (
                     <>

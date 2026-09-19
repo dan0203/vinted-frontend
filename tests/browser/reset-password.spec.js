@@ -160,7 +160,9 @@ test('shows the success screen on a successful confirm', async ({ page }) => {
     await form.getByRole('button', { name: 'Réinitialiser le mot de passe' }).click();
 
     await expect(
-        page.getByText('Votre mot de passe a été réinitialisé. Vous pouvez maintenant vous connecter.'),
+        page.getByText(
+            'Votre mot de passe a été réinitialisé. Vous pouvez maintenant vous connecter.',
+        ),
     ).toBeVisible();
     await expect(
         page.locator('.main-reset-password').getByRole('link', { name: 'Se connecter' }),

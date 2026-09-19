@@ -34,19 +34,21 @@ const buildPictureList = offer => {
         ? offer.pictures.slice(0, MAX_SECONDARY_PICTURES)
         : [];
 
-    return [offer.image, ...secondary]
-        // Image subdocuments carry no _id, and public_id is not unique within an
-        // offer: the API serves offers whose main image is repeated in pictures.
-        // The position is what makes a key unique here.
-        .map((picture, index) => {
-            const url = imageUrl(picture);
-            return {
-                key: `${picture?.public_id ?? 'picture'}-${index}`,
-                url,
-                thumbnail: url && thumbnailUrl(url),
-            };
-        })
-        .filter(picture => picture.url);
+    return (
+        [offer.image, ...secondary]
+            // Image subdocuments carry no _id, and public_id is not unique within an
+            // offer: the API serves offers whose main image is repeated in pictures.
+            // The position is what makes a key unique here.
+            .map((picture, index) => {
+                const url = imageUrl(picture);
+                return {
+                    key: `${picture?.public_id ?? 'picture'}-${index}`,
+                    url,
+                    thumbnail: url && thumbnailUrl(url),
+                };
+            })
+            .filter(picture => picture.url)
+    );
 };
 
 const Offer = () => {

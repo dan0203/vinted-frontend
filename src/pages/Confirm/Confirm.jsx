@@ -12,9 +12,7 @@ const Confirm = () => {
     useEffect(() => {
         const confirmAccount = async () => {
             try {
-                await axios.get(
-                    import.meta.env.VITE_API_URL + '/users/confirm/' + params.token,
-                );
+                await axios.get(import.meta.env.VITE_API_URL + '/users/confirm/' + params.token);
 
                 setError(null);
             } catch (error) {

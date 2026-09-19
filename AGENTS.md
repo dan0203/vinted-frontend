@@ -58,7 +58,7 @@ This is a Vite + React project (no test runner configured yet).
 - Build: `yarn build`
 - Preview production build: `yarn preview`
 - Lint: `yarn lint`
-- Verify: `yarn verify` (build; runs in GitHub Actions on pull requests and pushes to `master`)
+- Verify: `yarn verify` (Prettier check + build; runs in GitHub Actions on pull requests and pushes to `master`)
 - Browser tests: `yarn test:browser` (Playwright, `tests/browser/`; not part of `yarn verify` or CI)
 
 Unit testing is opt-in and not yet set up in this project.

@@ -31,7 +31,7 @@ test('shows a confirmation message instead of the form on a successful signup', 
 
     await expect(
         page.getByText(
-            'Merci de votre inscription ! Un email de confirmation vous a été envoyé, cliquez sur le lien qu\'il contient pour activer votre compte.',
+            "Merci de votre inscription ! Un email de confirmation vous a été envoyé, cliquez sur le lien qu'il contient pour activer votre compte.",
         ),
     ).toBeVisible();
     await expect(page.locator('.main-signup form')).toHaveCount(0);

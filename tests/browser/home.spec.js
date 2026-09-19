@@ -46,7 +46,9 @@ const mockOffers = (page, offers) =>
         }),
     );
 
-test('shows the placeholder and the seller initial when both images are missing', async ({ page }) => {
+test('shows the placeholder and the seller initial when both images are missing', async ({
+    page,
+}) => {
     await mockOffers(page, [
         buildListOffer('64a000000000000000000001', { image: EMPTY_IMAGE, avatar: EMPTY_IMAGE }),
     ]);

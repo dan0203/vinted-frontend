@@ -6,9 +6,30 @@ const IMAGE = { url: 'https://example.com/img.jpg' };
 // Deliberately not price-sorted, so the "no sort param" and "sort=" cases are
 // each only provable by checking the actual rendered order.
 const FIXTURE_OFFERS = [
-    { _id: 'baskets', name: 'Baskets running homme', price: 40, details: { size: '43', brand: 'Nike' }, image: IMAGE, owner: OWNER },
-    { _id: 'sac', name: 'Sac a main cuir', price: 120, details: { brand: 'Longchamp' }, image: IMAGE, owner: OWNER },
-    { _id: 'robe', name: 'Robe fleurie vintage', price: 25, details: { size: 'S', brand: 'Zara' }, image: IMAGE, owner: OWNER },
+    {
+        _id: 'baskets',
+        name: 'Baskets running homme',
+        price: 40,
+        details: { size: '43', brand: 'Nike' },
+        image: IMAGE,
+        owner: OWNER,
+    },
+    {
+        _id: 'sac',
+        name: 'Sac a main cuir',
+        price: 120,
+        details: { brand: 'Longchamp' },
+        image: IMAGE,
+        owner: OWNER,
+    },
+    {
+        _id: 'robe',
+        name: 'Robe fleurie vintage',
+        price: 25,
+        details: { size: 'S', brand: 'Zara' },
+        image: IMAGE,
+        owner: OWNER,
+    },
 ];
 
 // Mocks GET /offers against a fixed, known fixture (title/priceMin/priceMax/sort

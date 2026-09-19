@@ -29,8 +29,11 @@ export const useFavorites = () => {
     // away, rather than showing the previous user's hearts, their failed read,
     // or their error message (finding F-03).
     const [remembered, setRemembered] = useState(NOTHING_KNOWN);
-    const { ids: favoriteIds, hasFailed, error } =
-        remembered.userId === userId ? remembered : NOTHING_KNOWN;
+    const {
+        ids: favoriteIds,
+        hasFailed,
+        error,
+    } = remembered.userId === userId ? remembered : NOTHING_KNOWN;
 
     // Every write goes through here, so none of them can land on an account
     // other than the one it was made for: a session that changes mid-toggle

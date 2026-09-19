@@ -22,7 +22,7 @@ test('shows the generic sent message on a successful response', async ({ page })
 
     await expect(
         page.getByText(
-            "Si un compte existe pour cette adresse, un email de confirmation vient de lui être envoyé.",
+            'Si un compte existe pour cette adresse, un email de confirmation vient de lui être envoyé.',
         ),
     ).toBeVisible();
 });

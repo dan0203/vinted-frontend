@@ -1,2 +1,5 @@
 dist
 node_modules
+
+# Planning artifacts managed by the blueprint skills, not hand-formatted
+blueprint
