@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Avatar from '../../components/Avatar/Avatar';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
+import FavoriteButton from '../../components/FavoriteButton/FavoriteButton';
 import { imageUrl } from '../../utils/images';
 import { useBrokenUrls } from '../../utils/useBrokenUrls';
+import { useFavorites } from '../../utils/useFavorites';
 
 const DETAIL_LABELS = {
     brand: 'Marque',
@@ -65,6 +67,7 @@ const Offer = () => {
     // photo have different urls since the thumbnail asks for a crop, so one can
     // fail while the other loads.
     const { usable, markBroken, reset: resetBrokenUrls } = useBrokenUrls();
+    const favorites = useFavorites();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -188,20 +191,36 @@ const Offer = () => {
 
                         <h1>{offer.name}</h1>
 
-                        {!offer.status || offer.status === 'available' ? (
-                            <Link
-                                to="/payment"
-                                state={{
-                                    title: offer.name,
-                                    price: offer.price,
-                                    id: offer._id,
-                                }}
-                            >
-                                <button>Acheter</button>
-                            </Link>
-                        ) : (
-                            <button disabled>Acheter</button>
-                        )}
+                        <ErrorMessage error={favorites.error} />
+
+                        <div className="offer-actions">
+                            {!offer.status || offer.status === 'available' ? (
+                                <Link
+                                    to="/payment"
+                                    state={{
+                                        title: offer.name,
+                                        price: offer.price,
+                                        id: offer._id,
+                                    }}
+                                >
+                                    <button className="buy-button">Acheter</button>
+                                </Link>
+                            ) : (
+                                <button className="buy-button" disabled>
+                                    Acheter
+                                </button>
+                            )}
+                            {/* A sold or reserved offer can still be favorited,
+                                so this stays outside the availability check. */}
+                            {favorites.isAvailable && (
+                                <FavoriteButton
+                                    isFavorite={favorites.isFavorite(offer._id)}
+                                    isLoaded={favorites.isLoaded}
+                                    isPending={favorites.isPending(offer._id)}
+                                    onToggle={() => favorites.toggle(offer._id)}
+                                />
+                            )}
+                        </div>
                     </aside>
                 </div>
             </main>

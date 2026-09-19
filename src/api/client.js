@@ -15,6 +15,25 @@ export const subscribeToken = listener => {
     return () => listeners.delete(listener);
 };
 
+// Read from the token rather than kept from the login response, which is the
+// only place the API ever sends the user id: `/users/refresh` returns a bare
+// accessToken, so an id stored at login would go stale on the first silent
+// refresh. The signature is not checked, which is fine because this only
+// addresses requests the backend authorizes on its own (403 on someone else's
+// id), never to decide what the user is allowed to do.
+export const getUserId = () => {
+    if (!currentToken) {
+        return null;
+    }
+
+    try {
+        const payload = currentToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+        return JSON.parse(atob(payload)).sub ?? null;
+    } catch {
+        return null;
+    }
+};
+
 const client = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
     withCredentials: true,

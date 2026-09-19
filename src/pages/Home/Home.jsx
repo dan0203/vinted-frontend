@@ -7,6 +7,8 @@ import { imageUrl } from '../../utils/images';
 import { useBrokenUrls } from '../../utils/useBrokenUrls';
 import Avatar from '../../components/Avatar/Avatar';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
+import FavoriteButton from '../../components/FavoriteButton/FavoriteButton';
+import { useFavorites } from '../../utils/useFavorites';
 
 const Home = ({ search }) => {
     const [offers, setOffers] = useState(null);
@@ -18,6 +20,11 @@ const Home = ({ search }) => {
     const [page, setPage] = useState(1);
     const [pageCount, setPageCount] = useState(1);
     const { usable, markBroken, reset: resetBrokenUrls } = useBrokenUrls();
+    // One instance for the whole list, so the page reads the favorites once
+    // instead of once per card.
+    const favorites = useFavorites();
+    const favoritesErrorRef = useRef(null);
+    const { clearError: clearFavoritesError } = favorites;
 
     const filterKey = `${search}|${priceMin}|${priceMax}|${sort}`;
     const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
@@ -25,6 +32,16 @@ const Home = ({ search }) => {
         setPrevFilterKey(filterKey);
         setPage(1);
     }
+
+    // The grid is five cards wide, so the shared message can sit several rows
+    // above the heart that failed. Bring it to the user rather than the other
+    // way round: a heart that flips back with its only explanation outside the
+    // viewport reads as the click doing nothing.
+    useEffect(() => {
+        if (favorites.error) {
+            favoritesErrorRef.current?.scrollIntoView({ block: 'center' });
+        }
+    }, [favorites.error]);
 
     const isFirstRun = useRef(true);
     const requestIdRef = useRef(0);
@@ -57,6 +74,10 @@ const Home = ({ search }) => {
 
                 setOffers(response.data.offers);
                 resetBrokenUrls();
+                // A toggle failure belongs to the list it happened on. Without
+                // this it stays pinned above a different set of offers after a
+                // search or a page change, still scrolled into view.
+                clearFavoritesError();
                 setPageCount(response.data.totalPages || 1);
                 setError(null);
             } catch (error) {
@@ -80,7 +101,7 @@ const Home = ({ search }) => {
 
         const timeout = setTimeout(fetchData, 400);
         return () => clearTimeout(timeout);
-    }, [search, priceMin, priceMax, sort, page, resetBrokenUrls]);
+    }, [search, priceMin, priceMax, sort, page, resetBrokenUrls, clearFavoritesError]);
 
     return isLoading ? (
         <p className="loading">Chargement en cours...</p>
@@ -133,37 +154,58 @@ const Home = ({ search }) => {
                     </div>
                 ) : (
                     <>
+                        {favorites.error && (
+                            <div className="container" ref={favoritesErrorRef}>
+                                <ErrorMessage error={favorites.error} />
+                            </div>
+                        )}
+
                         <div className="container">
-                            {offers.map(offer => (
-                                <Link to={`/offers/${offer._id}`} key={offer._id}>
-                                    <article>
-                                        <p className="user-info">
-                                            <Avatar account={offer.owner.account} />
-                                            <span>{offer.owner.account.username}</span>
-                                        </p>
-                                        {usable(imageUrl(offer.image)) ? (
-                                            <img
-                                                src={imageUrl(offer.image)}
-                                                alt={offer.name}
-                                                onError={() => markBroken(imageUrl(offer.image))}
-                                            />
-                                        ) : (
-                                            <p className="no-photo">
-                                                {imageUrl(offer.image)
-                                                    ? 'Image indisponible'
-                                                    : 'Pas de photo'}
+                            {offers.map(offer => {
+                                // One url, three states: usable, dead, absent.
+                                const url = imageUrl(offer.image);
+
+                                return (
+                                    // The heart is a sibling of the link, not a
+                                    // child: a button inside an anchor is
+                                    // invalid markup and every click would open
+                                    // the offer.
+                                    <article key={offer._id}>
+                                        <Link to={`/offers/${offer._id}`}>
+                                            <p className="user-info">
+                                                <Avatar account={offer.owner.account} />
+                                                <span>{offer.owner.account.username}</span>
                                             </p>
-                                        )}
-                                        <p className="price">{offer.price} €</p>
-                                        {offer.details?.size !== undefined && (
-                                            <p className="size">{offer.details.size}</p>
-                                        )}
-                                        {offer.details?.brand !== undefined && (
-                                            <p className="marque">{offer.details.brand}</p>
+                                            {usable(url) ? (
+                                                <img
+                                                    src={url}
+                                                    alt={offer.name}
+                                                    onError={() => markBroken(url)}
+                                                />
+                                            ) : (
+                                                <p className="no-photo">
+                                                    {url ? 'Image indisponible' : 'Pas de photo'}
+                                                </p>
+                                            )}
+                                            <p className="price">{offer.price} €</p>
+                                            {offer.details?.size !== undefined && (
+                                                <p className="size">{offer.details.size}</p>
+                                            )}
+                                            {offer.details?.brand !== undefined && (
+                                                <p className="marque">{offer.details.brand}</p>
+                                            )}
+                                        </Link>
+                                        {favorites.isAvailable && (
+                                            <FavoriteButton
+                                                isFavorite={favorites.isFavorite(offer._id)}
+                                                isLoaded={favorites.isLoaded}
+                                                isPending={favorites.isPending(offer._id)}
+                                                onToggle={() => favorites.toggle(offer._id)}
+                                            />
                                         )}
                                     </article>
-                                </Link>
-                            ))}
+                                );
+                            })}
                         </div>
 
                         <div className="container pagination">

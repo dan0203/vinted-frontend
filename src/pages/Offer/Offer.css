@@ -164,7 +164,10 @@
             }
         }
 
-        button {
+        /* Scoped to the Buy button rather than every `button` in the aside, so
+           a second control here keeps its own styles instead of having to undo
+           these six properties. */
+        .buy-button {
             width: 100%;
             border: 1px solid #2cb1ba;
             color: #fff;
@@ -173,11 +176,26 @@
             padding: 12px 0;
         }
 
-        button:disabled {
+        .buy-button:disabled {
             border-color: #ccc;
             color: #ccc;
             background-color: #fff;
             cursor: not-allowed;
+        }
+
+        .offer-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            /* The Buy link keeps the full-width button it had on its own. */
+            > a {
+                flex: 1;
+            }
+
+            > .favorite-button {
+                flex: 0 0 auto;
+            }
         }
     }
 }

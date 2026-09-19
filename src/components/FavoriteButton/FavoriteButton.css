@@ -1,0 +1,25 @@
+.favorite-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #bbb;
+    border-radius: 50%;
+    background-color: #fff;
+    color: #666;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.favorite-button.is-favorite {
+    border-color: #2cb1ba;
+    color: #2cb1ba;
+}
+
+.favorite-button:disabled {
+    border-color: #ddd;
+    color: #ccc;
+    cursor: not-allowed;
+}
