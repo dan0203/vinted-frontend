@@ -1,0 +1,52 @@
+/* Only the controls feature 20 adds or changes are styled here. The rest of
+   this form has shipped unstyled and a full restyle is separate work. */
+
+.main-publish .publish-pictures {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.main-publish .publish-pictures label {
+    color: #666;
+}
+
+.main-publish .publish-pictures input[type='file'] {
+    padding: 0;
+    border-bottom: none;
+    cursor: pointer;
+}
+
+.publish-picture-names {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #666;
+    list-style: disc inside;
+}
+
+.main-publish .error-message {
+    width: auto;
+    max-width: 480px;
+    margin-top: 20px;
+}
+
+.main-publish form button {
+    border: 1px solid #2cb1ba;
+    color: #fff;
+    background-color: #2cb1ba;
+    cursor: pointer;
+}
+
+.main-publish form button:disabled {
+    border-color: #a8dade;
+    background-color: #a8dade;
+    cursor: not-allowed;
+}
+
+.publish-confirmation {
+    margin: 20px 0;
+    font-size: 18px;
+    color: #2cb1ba;
+}

@@ -10,7 +10,11 @@ const ErrorMessage = ({ error }) => {
     const message =
         error?.response?.data?.message || (typeof error === 'string' && error) || FALLBACK_MESSAGE;
 
-    return <p className="error-message">{message}</p>;
+    return (
+        <p className="error-message" role="alert">
+            {message}
+        </p>
+    );
 };
 
 export default ErrorMessage;

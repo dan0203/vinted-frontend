@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { PNG } from './fixtures';
 
 const loginThenGoToPublish = async page => {
     await page.route('**/users/login', route =>
@@ -22,6 +23,11 @@ const loginThenGoToPublish = async page => {
 const submitPublish = async page => {
     await page.locator('input[name="title"]').fill('Chemise');
     await page.locator('input[name="price"]').fill('10');
+    // The form refuses to send anything without a main picture, so these tests
+    // need a real one to reach the authenticated request they are about.
+    await page
+        .locator('#picture')
+        .setInputFiles({ name: 'main.png', mimeType: 'image/png', buffer: PNG });
     await page.getByRole('button', { name: 'Ajouter' }).click();
 };
 

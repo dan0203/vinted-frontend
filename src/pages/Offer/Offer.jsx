@@ -1,5 +1,5 @@
 import './Offer.css';
-import { Link, useParams } from 'react-router';
+import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Avatar from '../../components/Avatar/Avatar';
@@ -49,6 +49,14 @@ const buildPictureList = offer => {
 
 const Offer = () => {
     const params = useParams();
+    const location = useLocation();
+    const navigate = useNavigate();
+    // Captured once, because the flag is cleared from history below and the
+    // banner has to outlive that. Bound to the offer it arrived with: this
+    // component survives a change of :id, so a plain boolean would follow the
+    // seller onto the next offer they opened.
+    const [publishedId] = useState(() => (location.state?.published ? params.id : null));
+    const justPublished = publishedId === params.id;
     const [offer, setOffer] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -79,6 +87,14 @@ const Offer = () => {
         fetchData();
     }, [params.id, resetBrokenUrls]);
 
+    useEffect(() => {
+        if (location.state?.published) {
+            // Drop the flag from the history entry, so reloading this offer or
+            // coming back to it does not announce the publication again.
+            navigate(location.pathname, { replace: true, state: null });
+        }
+    }, [location.pathname, location.state, navigate]);
+
     const pictures = buildPictureList(offer);
     // Clamp on render rather than in an effect: the list can only shrink under a
     // stale index, and a clamped index keeps the pressed thumbnail in sync with
@@ -97,6 +113,11 @@ const Offer = () => {
     ) : (
         <>
             <main className="main-offer">
+                {justPublished && (
+                    <p className="offer-published" role="status">
+                        Ton article est en ligne !
+                    </p>
+                )}
                 <div className="container">
                     <div className="offer-gallery">
                         {!selectedPicture ? (
