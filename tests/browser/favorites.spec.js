@@ -1,36 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { buildToken, OFFER, OFFER_ID, OTHER_OFFER, USER_ID } from './fixtures';
 
 // Host-qualified for the same reason offer.spec.js is: a bare `**/offers/*`
 // glob also matches the app's own navigation to /offers/:id and would replace
 // the document with raw JSON.
 const API_URL = 'http://localhost:3000';
-
-const USER_ID = '6aae67d160da136b79ae2d1b';
-const OFFER_ID = '64a000000000000000000000';
-
-// The app reads the user id out of the token's `sub` claim, so a stubbed login
-// has to hand back something shaped like a real JWT rather than a bare string.
-const buildToken = sub =>
-    [
-        Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url'),
-        Buffer.from(JSON.stringify({ sub })).toString('base64url'),
-        'signature-not-checked-client-side',
-    ].join('.');
-
-const OFFER = {
-    _id: OFFER_ID,
-    name: 'Chemise Sézane verte',
-    description: 'Portée quelques fois',
-    price: 40,
-    details: { brand: 'Sézane', size: 'M' },
-    image: { secure_url: 'https://example.com/img.jpg' },
-    owner: { _id: '64b000000000000000000000', account: { username: 'seller' } },
-    status: 'available',
-};
-
-// A second card, so the list can prove each heart tracks its own offer rather
-// than one shared flag.
-const OTHER_OFFER = { ...OFFER, _id: '64c000000000000000000000', name: 'Jupe en jean', price: 25 };
 
 const json = (route, body, status = 200) =>
     route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(body) });

@@ -11,17 +11,36 @@ import Payment from './pages/Payment/Payment';
 import Confirm from './pages/Confirm/Confirm';
 import ResendConfirmation from './pages/ResendConfirmation/ResendConfirmation';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
-import { getToken, setToken as setStoredToken, subscribeToken } from './api/client';
+import { getToken, restoreSession, setToken as setStoredToken, subscribeToken } from './api/client';
 
 function App() {
     const [search, setSearch] = useState('');
     const [token, setToken] = useState(getToken());
+    // The access token lives in memory only, so every page load starts signed
+    // out until the refresh cookie has had its one chance to say otherwise.
+    const [isRestoring, setIsRestoring] = useState(true);
 
     useEffect(() => subscribeToken(setToken), []);
+
+    useEffect(() => {
+        restoreSession().finally(() => setIsRestoring(false));
+    }, []);
 
     const handleToken = token => {
         setStoredToken(token);
     };
+
+    // Nothing renders until the answer is in, Header included. A signed-out
+    // first paint is not a cosmetic flash here: `Publish` and `Payment` redirect
+    // away on a falsy token, and adopting the token afterwards does not bring
+    // the visitor back to the url they opened.
+    if (isRestoring) {
+        return (
+            <div className="container">
+                <p className="loading">Chargement en cours...</p>
+            </div>
+        );
+    }
 
     return (
         <>

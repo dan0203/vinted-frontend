@@ -46,6 +46,19 @@ client.interceptors.request.use(config => {
     return config;
 });
 
+// One bounded refresh, shared by the interceptor below and the page-load
+// bootstrap. Bare `axios`, never `client`: sending it through the interceptor
+// would answer its own 401 with a second refresh and then push the visitor to
+// /login. Bounded because axios has no default timeout, and an unbounded
+// refresh leaves whatever waits on it pending for good: the first render for
+// the bootstrap, the retried request for the interceptor (findings F-01, F-05).
+const requestRefresh = () =>
+    axios.post(
+        `${import.meta.env.VITE_API_URL}/users/refresh`,
+        {},
+        { withCredentials: true, timeout: 5000 },
+    );
+
 client.interceptors.response.use(
     response => response,
     async error => {
@@ -57,11 +70,7 @@ client.interceptors.response.use(
         originalRequest._retried = true;
 
         try {
-            const refreshResponse = await axios.post(
-                `${import.meta.env.VITE_API_URL}/users/refresh`,
-                {},
-                { withCredentials: true },
-            );
+            const refreshResponse = await requestRefresh();
             const newToken = refreshResponse.data.accessToken;
             setToken(newToken);
             originalRequest.headers.Authorization = `Bearer ${newToken}`;
@@ -75,5 +84,18 @@ client.interceptors.response.use(
         }
     },
 );
+
+// The page-load bootstrap. A failure here is never a redirect: anonymous
+// browsing is the app's default state, unlike the interceptor's refresh, which
+// fails a request the user already asked for.
+export const restoreSession = async () => {
+    try {
+        const response = await requestRefresh();
+        setToken(response.data.accessToken);
+    } catch {
+        // No cookie, expired, rotated away, too slow, or the API is unreachable:
+        // browsing anonymously is the app's normal state, not an error to report.
+    }
+};
 
 export default client;
