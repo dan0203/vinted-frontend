@@ -33,5 +33,5 @@ blob-report
 # AI Blueprint local workflow files
 .agents/
 .claude/
-blueprint/
+blueprint/.state/
 CLAUDE.md
